@@ -4,14 +4,30 @@ import java.util.*;
 
 public class Account {
 	private int userId;
-	private String userPasswordHash;
+	private String userPassword;
 	private HashMap<String, String> information;
-//	private int accessLevel;
+	private int accessLevel;
 
-	public Account(int uId, String uPH) {
-		userId = uId;
-		userPasswordHash = uPH;
+	public Account(int uI, String uP) {
+		userId = uI;
+		userPassword = uP;
 		information = new HashMap<>();
+	}
+	
+	public void setUserId(int uI) {
+		userId = uI;
+	}
+	
+	public int getUserId() {
+		return userId;
+	}
+	
+	public void setUserPassword(String uP) {
+		userPassword = uP;
+	}
+	
+	public String getUserPassword() {
+		return userPassword;
 	}
 	
 	public void setInformation(HashMap<String, String> info) {
@@ -22,22 +38,38 @@ public class Account {
 		return information;
 	}
 	
-	public boolean authenticate(int uId, String uPH) {
-		if(userId == uId && userPasswordHash.equals(uPH)) {
+	public void setAccessLevel(int aL) {
+		accessLevel = aL;
+	}
+	
+	public int getAccessLevel() {
+		return accessLevel;
+	}
+	
+	public boolean authenticate(int uI, String uP) {
+		if(userId == uI && userPassword.equals(uP)) {
 			return true;
 		}
 		return false;
 	}
 	
-	public void parse(String data) {
-		// ???
+	public void setAttr(String key, String value) {
+		information.put(key, value);
 	}
 	
-/*	public void setAccessLevel(int aL) {
-		accessLevel = aL;
-	} */
+	public String getAttr(String key) {
+		return information.get(key);
+	}
 	
-/*	public int getAccessLevel() {
-		return accessLevel;
-	} */
+	public String toString() {
+		String ret = "Account Info:";
+		ret += "\n- User ID: " + this.getUserId();
+		ret += "\n- User Password: " + this.getUserPassword();
+		ret += "\n- Access Level: " + this.getAccessLevel();
+		for(Map.Entry<String, String> e : information.entrySet()) {
+			ret += "\n  - " + e.getKey() + ": " + e.getValue();
+		}
+		ret += "\n";
+		return ret;
+	}
 }
