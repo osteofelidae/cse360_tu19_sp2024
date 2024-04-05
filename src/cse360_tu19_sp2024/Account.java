@@ -11,7 +11,8 @@ public class Account {
 	public Account(int uI, String uP) {
 		userId = uI;
 		userPassword = uP;
-		information = new HashMap<>();
+		information = new HashMap<String, String>();
+		accessLevel = 0;
 	}
 	
 	public void setUserId(int uI) {
