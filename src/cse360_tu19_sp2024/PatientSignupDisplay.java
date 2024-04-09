@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.control.Hyperlink;
 
 // Represents the Receptionist View
 public class PatientSignupDisplay extends LoginDisplay {
@@ -39,8 +40,37 @@ public class PatientSignupDisplay extends LoginDisplay {
         Label ilab = new Label("Insurance ID: ");
 
         Button save = new Button("Save");
+        Hyperlink back = new Hyperlink("Take me to login");
+        
         save.setStyle("-fx-background-color: royalblue; -fx-text-fill: black;");
         //save.setOnAction(e -> savePatientIntake());
+        
+        
+        
+        save.setOnAction(event -> {
+        	System.out.println("validating signup");
+            
+            String[] categories = {"first name", "last name", "email", "phone number", "health history", "insurance id"};
+            String[] immediates = {fname.getText(), lname.getText(), email.getText(), num.getText(), hist.getText(), insID.getText()};
+            
+            PatientSignupForm newform = new PatientSignupForm("title", categories, immediates, fname.getText() + lname.getText());
+            if (newform.validateUserSignup()) {
+            	//go to patient view
+            	//create new patient account
+            	System.out.println("success, now lets go to patient view");
+            	
+            } else {
+            	//display some sort of error
+            	System.out.println("Sorry, please try again");
+            }
+        });
+        
+        back.setOnAction(event -> {
+            // Open another display
+            System.out.println("going to login");
+            PatientLoginDisplay newlogin = new PatientLoginDisplay();
+            newlogin.start(primaryStage);
+        });
 
         fname.setPrefWidth(250);
         lname.setPrefWidth(250);
@@ -59,7 +89,7 @@ public class PatientSignupDisplay extends LoginDisplay {
         center.getChildren().addAll(fname, lname, email, num, hist, insID);
 
         VBox botright = new VBox(10);
-        botright.getChildren().addAll(save);
+        botright.getChildren().addAll(save, back);
 
         left.setAlignment(Pos.TOP_LEFT);
         center.setAlignment(Pos.TOP_LEFT);
