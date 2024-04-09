@@ -1,4 +1,4 @@
-package asuHelloWorldJavaFX;
+package cse360_tu19_sp2024;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -11,15 +11,15 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 // Represents the Receptionist View
-public class StaffLoginDisplay extends LoginDisplay {
+public class PatientSignupDisplay extends LoginDisplay {
 
     TextField fname, lname, email, num, hist, insID;
     Label errorMessage;
 
-    // Starts the StaffLoginDisplay View
+    // Starts the PatientSignupDisplay View
     public void start(Stage primaryStage) {
 
-        primaryStage.setTitle("StaffLoginDisplay");
+        primaryStage.setTitle("Receptionist View");
 
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(10));
