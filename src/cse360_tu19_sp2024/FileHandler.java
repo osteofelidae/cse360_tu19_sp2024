@@ -37,4 +37,19 @@ public class FileHandler {
         }
         return lines;
     }
+    
+    // Parse
+    public HashMap<String, String> parse(String fileName) {
+    	HashMap<String, String> information = new HashMap<String, String>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] splitLine = line.split(": ");
+                information.put(splitLine[0], splitLine[1]);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return information;
+    }
 }
