@@ -5,11 +5,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.scene.layout.VBox;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.text.Font;
@@ -27,8 +27,8 @@ public class PatientLoginDisplay extends LoginDisplay {
         VBox root = new VBox(10);
         root.setPadding(new Insets(20));
 
-        userField = new TextField();
-        passField = new TextField();
+        userField = new TextField("Enter username...");
+        passField = new TextField("Enter password...");
 
         Label title = new Label("Patient Login");
         Label user = new Label("Username");
@@ -39,7 +39,7 @@ public class PatientLoginDisplay extends LoginDisplay {
         pass.setFont(Font.font("Times New Roman"));
 
         Button login = new Button("Login");
-        //save.setOnAction(e -> viewScanReport());
+        //login.setOnAction(e -> viewScanReport());
 
         
         login.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
@@ -49,14 +49,20 @@ public class PatientLoginDisplay extends LoginDisplay {
         Hyperlink newPatient = new Hyperlink("New patient? Take me to sign up >");
         Hyperlink back = new Hyperlink("Back to login selection");
         
-        newPatient.setOnAction(event -> {
-            // Open another display
-            System.out.println("Opening another display 1...");
+        newPatient.setOnAction(new EventHandler<>() {
+            public void handle(ActionEvent event) {
+                System.out.println("Opening Patient Signup Display!");
+                PatientSignupDisplay patientSignup = new PatientSignupDisplay();
+                patientSignup.start(primaryStage);
+            }
         });
         
-        back.setOnAction(event -> {
-            // Open another display
-            System.out.println("Opening another display 2...");
+        back.setOnAction(new EventHandler<>() {
+            public void handle(ActionEvent event) {
+                System.out.println("Opening Login Display!");
+                LoginDisplay loginDisplay = new LoginDisplay();
+                loginDisplay.start(primaryStage);
+            }
         });
         
         HBox inputBoxes = new HBox(10);

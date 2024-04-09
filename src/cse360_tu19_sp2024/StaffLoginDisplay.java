@@ -1,81 +1,73 @@
 package asuHelloWorldJavaFX;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
+
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import javafx.scene.layout.HBox;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
-// Represents the Receptionist View
+// Represents the PatientLoginDisplay
 public class StaffLoginDisplay extends LoginDisplay {
+    TextField userField, passField;
 
-    TextField fname, lname, email, num, hist, insID;
-    Label errorMessage;
-
-    // Starts the StaffLoginDisplay View
+    // Starts the PatientLoginDisplay
     public void start(Stage primaryStage) {
 
-        primaryStage.setTitle("StaffLoginDisplay");
+        primaryStage.setTitle("Staff Login");
 
-        BorderPane root = new BorderPane();
-        root.setPadding(new Insets(10));
+        VBox root = new VBox(10);
+        root.setPadding(new Insets(20));
 
-        fname = new TextField();
-        lname = new TextField();
-        email = new TextField();
-        num = new TextField();
-        hist = new TextField();
-        insID = new TextField();
+        userField = new TextField("Enter username...");
+        passField = new TextField("Enter password...");
 
-        Label flab = new Label("First Name: ");
-        Label llab = new Label("Last Name: ");
-        Label elab = new Label("Email: ");
-        Label nlab = new Label("Phone Number: ");
-        Label hlab = new Label("Health History: ");
-        Label ilab = new Label("Insurance ID: ");
+        Label title = new Label("Staff Login");
+        Label user = new Label("Username");
+        Label pass = new Label("Password");
+        
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        user.setFont(Font.font("Times New Roman"));
+        pass.setFont(Font.font("Times New Roman"));
 
-        Button save = new Button("Save");
-        save.setStyle("-fx-background-color: royalblue; -fx-text-fill: black;");
-        //save.setOnAction(e -> savePatientIntake());
+        Button login = new Button("Login");
+        //login.setOnAction(e -> viewScanReport());
 
-        fname.setPrefWidth(250);
-        lname.setPrefWidth(250);
-        email.setPrefWidth(250);
-        num.setPrefWidth(250);
-        hist.setPrefWidth(250);
-        insID.setPrefWidth(250);
+        
+        login.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
+        login.setPrefWidth(90);
+        login.setPrefHeight(20);
+        
+        Label message = new Label("Please contact the system administrator to create an account.");
+        message.setFont(Font.font("Times New Roman", 13));
+        
+        Hyperlink back = new Hyperlink("Back to login selection");
+        
+        back.setOnAction(new EventHandler<>() {
+            public void handle(ActionEvent event) {
+                System.out.println("Opening Login Display!");
+                LoginDisplay loginDisplay = new LoginDisplay();
+                loginDisplay.start(primaryStage);
+            }
+        });
+        
+        HBox inputBoxes = new HBox(10);
+        VBox userLabelandInput = new VBox(10, user, userField);
+        VBox passLabelandInput = new VBox(10, pass, passField);
+        inputBoxes.getChildren().addAll(userLabelandInput, passLabelandInput);
 
-        Insets ins = new Insets(0,0,0,0);
-        VBox.setMargin(flab, ins);
+        root.getChildren().addAll(title, inputBoxes, login, message, back);
 
-        VBox left = new VBox(20);
-        left.getChildren().addAll(flab, llab, elab, nlab, hlab, ilab);
-
-        VBox center = new VBox(10);
-        center.getChildren().addAll(fname, lname, email, num, hist, insID);
-
-        VBox botright = new VBox(10);
-        botright.getChildren().addAll(save);
-
-        left.setAlignment(Pos.TOP_LEFT);
-        center.setAlignment(Pos.TOP_LEFT);
-        botright.setAlignment(Pos.BOTTOM_RIGHT);
-
-        root.setLeft(left);
-        root.setCenter(center);
-        root.setBottom(botright);
-
-        errorMessage = new Label();
-        errorMessage.setStyle("-fx-text-fill: red;");
-        botright.getChildren().add(0, errorMessage);
-
-        Scene scene = new Scene(root, 500, 400);
+        Scene scene = new Scene(root, 400, 250);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
 }
