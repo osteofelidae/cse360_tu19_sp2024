@@ -52,4 +52,11 @@ public class FileHandler {
         }
         return information;
     }
+    
+    // Update attribute attr to value, or create it if it does not exist
+    public void updateAttr(String fileName, String attr, String value) {
+    	HashMap<String, String> information = this.parse(fileName);
+    	information.put(attr, value);
+    	this.save(fileName, information);
+    }
 }
