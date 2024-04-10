@@ -1,5 +1,6 @@
 package cse360_tu19_sp2024;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,9 +28,7 @@ import javafx.scene.layout.Pane;
 // Represents the Receptionist View
 public class PatientSignupDisplay extends LoginDisplay {
 	VBox pane;
-    TextField email, pass, passRepeat, firstName, lastName, 
-    	address1, 
-    	address2, postalCode;
+    TextField username, email, pass, passRepeat, firstName, lastName, address1, address2, postalCode;
     
     ComboBox state, dobDay, dobMonth, dobYear;
 
@@ -42,6 +41,7 @@ public class PatientSignupDisplay extends LoginDisplay {
         pane.setPadding(new Insets(20));
         
         Label title = new Label("Signup");
+        Label usernameLabel = new Label("Username");
         Label emailLabel = new Label("Email");
         Label passLabel = new Label("Password");
         Label repeatPassLabel = new Label("Repeat Password");
@@ -55,6 +55,7 @@ public class PatientSignupDisplay extends LoginDisplay {
         Label postalCodeLabel = new Label("Postal Code");
         
         title.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        usernameLabel.setFont(Font.font("Times New Roman"));
         emailLabel.setFont(Font.font("Times New Roman"));
         passLabel.setFont(Font.font("Times New Roman"));
         repeatPassLabel.setFont(Font.font("Times New Roman"));
@@ -67,6 +68,8 @@ public class PatientSignupDisplay extends LoginDisplay {
         stateLabel.setFont(Font.font("Times New Roman"));
         postalCodeLabel.setFont(Font.font("Times New Roman"));
         
+        username = new TextField();
+        username.setPromptText("Enter username...");
         email = new TextField();
         email.setPromptText("Enter email...");
         pass = new TextField();
@@ -118,6 +121,35 @@ public class PatientSignupDisplay extends LoginDisplay {
         signUpButton.setOnAction(e -> {
         	HashMap<String, String> data = new HashMap<String, String>();
         	
+        	// --- Check if username matches -----------------------------------------------------
+            // If username is empty or default, display alert and interrupt function flow
+            if (username.getText().equals("")) {
+	        	Alert alert = new Alert(AlertType.ERROR);
+	        	alert.setHeaderText("Invalid input");
+	        	alert.setContentText("Please set username");
+	        	alert.showAndWait();
+	        	return;
+            	
+            // Check if username already exists
+            } else {
+            	File dir = new File("files/users");
+            	File[] files = dir.listFiles();
+            	if(files==null) {
+            		data.put("Username", username.getText());
+            		return;
+            	}
+            	File newFile = new File("files/users", username.getText() + ".txt");
+            	if(newFile.exists()) {
+	            	Alert alert = new Alert(AlertType.ERROR);
+	            	alert.setHeaderText("Invalid input");
+	            	alert.setContentText("Username already exists. Please choose a different username.");
+	            	alert.showAndWait();
+	            	return;
+            	} else {
+            		data.put("Username", username.getText());
+            	}
+            }
+        	
         	// --- Check if email is formatted to be an email -------------------------------------
         	Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
             Matcher matcher = pattern.matcher(email.getText());
@@ -137,7 +169,7 @@ public class PatientSignupDisplay extends LoginDisplay {
         	
             // --- Check if password matches ------------------------------------------------------
             // If password is empty or default, display alert and interrupt function flow
-            if (pass.getText() == null || pass.getText().equals("Enter password...")) {
+            if (pass.getText().equals("")) {
 	        	Alert alert = new Alert(AlertType.ERROR);
 	        	alert.setHeaderText("Invalid input");
 	        	alert.setContentText("Please set password");
@@ -159,7 +191,7 @@ public class PatientSignupDisplay extends LoginDisplay {
             
             // --- Check if first name and last name are not empty --------------------------------
             // If first name is empty or not set, display alert and interrupt function flow
-            if (firstName.getText() == null || firstName.getText().equals("Enter first name...")) {
+            if (firstName.getText().equals("")) {
             	Alert alert = new Alert(AlertType.ERROR);
             	alert.setHeaderText("Invalid input");
             	alert.setContentText("Please set first name");
@@ -172,7 +204,7 @@ public class PatientSignupDisplay extends LoginDisplay {
             }
             
             // If last name is empty or not set, display alert and interrupt function flow
-            if (lastName.getText() == null || lastName.getText().equals("Enter last name...")) {
+            if (lastName.getText().equals("")) {
             	Alert alert = new Alert(AlertType.ERROR);
             	alert.setHeaderText("Invalid input");
             	alert.setContentText("Please set last name");
@@ -226,7 +258,7 @@ public class PatientSignupDisplay extends LoginDisplay {
         	
             // --- Check if address is set --------------------------------------------------------
             // If address is not set, display alert and interrupt function flow
-            if (address1.getText() == null || address1.getText().equals("Enter address 1...")) {
+            if (address1.getText().equals("")) {
             	Alert alert = new Alert(AlertType.ERROR);
             	alert.setHeaderText("Invalid input");
             	alert.setContentText("Please set Address 1");
@@ -239,7 +271,7 @@ public class PatientSignupDisplay extends LoginDisplay {
             }
             
             // If Address 2 is set, add to 'data'
-            if (address2.getText() != null && !address2.getText().equals("Enter address 2 (optional)...")) {
+            if (address2.getText().equals("")) {
             	data.put("Address 2", address2.getText());
             }
         	
@@ -259,23 +291,24 @@ public class PatientSignupDisplay extends LoginDisplay {
         	
         	// --- Check if postal code is set ----------------------------------------------------
         	// If postal code is set, add to 'data'
-            if (postalCode.getText() != null) {
+            if (!postalCode.getText().equals("")) {
             	data.put("Postal code", postalCode.getText());
             	
             // If not, display alert and interrupt function flow
             } else {
             	Alert alert = new Alert(AlertType.ERROR);
             	alert.setHeaderText("Invalid input");
-            	alert.setContentText("Address 1 cannot be empty");
+            	alert.setContentText("Postal code cannot be empty");
             	alert.showAndWait();
             	return;
             }
         	
             // Save to file
         	FileHandler fh = new FileHandler();
-        	fh.save("patient.txt", data);  // TODO make a unique filename
+        	fh.save("files/users/" + username.getText() + ".txt", data);
         });
 
+        username.setPrefWidth(250);
         email.setPrefWidth(250);
         pass.setPrefWidth(250);
         passRepeat.setPrefWidth(250);
@@ -319,7 +352,7 @@ public class PatientSignupDisplay extends LoginDisplay {
         HBox statePostalInputs = new HBox(10);
         statePostalInputs.getChildren().addAll(stateBox, postalBox);
         
-        pane.getChildren().addAll(title, emailLabel, email, passwordInputs,
+        pane.getChildren().addAll(title, usernameLabel, username, emailLabel, email, passwordInputs,
         		detailsSectionLabel, nameInputs, dobLabel, dob, 
         		address1Label, address1, address2Label, address2,
         		statePostalInputs, consent, signUpButton, back);
