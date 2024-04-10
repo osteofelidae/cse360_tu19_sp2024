@@ -53,6 +53,12 @@ public class FileHandler {
         return information;
     }
     
+    // Get Attribute
+    public String getAttr(String fileName, String attr) {
+    	HashMap<String, String> information = this.parse(fileName);
+    	return information.get(attr);
+    }
+    
     // Update attribute attr to value, or create it if it does not exist
     public void updateAttr(String fileName, String attr, String value) {
     	HashMap<String, String> information = this.parse(fileName);
@@ -67,11 +73,19 @@ public class FileHandler {
     	this.save(fileName, information);
     }
     
-    
     // Remove attribute
     public void removeAttr(String fileName, String attr) {
     	HashMap<String, String> information = this.parse(fileName);
     	information.remove(attr);
+    	this.save(fileName, information);
+    }
+    
+    // Remove multiple attributes
+    public void removeAttrs(String fileName, String attr[]) {
+    	HashMap<String, String> information = this.parse(fileName);
+    	for (String a : attr) {
+    		information.remove(a);
+    	}
     	this.save(fileName, information);
     }
 }
