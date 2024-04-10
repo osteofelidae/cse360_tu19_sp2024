@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -17,15 +18,17 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PatientDetailsDisplay extends Application {
 	
 	// === INSTANCE VARAIBLES =====================================================================
-	private String username = "12345";
-    
+	private String username = "johndoe";  // TODO temp thing for testing
 	
 	// === MAIN DRIVER ============================================================================
     public static void main(String[] args) {
@@ -46,8 +49,9 @@ public class PatientDetailsDisplay extends Application {
         primaryStage.setTitle("Patient Details");
         
         // --- Retrieve patient file --------------------------------------------------------------
+        String fileName = "files/users/"+username+".txt";
         FileHandler fh = new FileHandler();
-        HashMap<String, String> data = fh.parse("files/users/"+username+".txt");  // Retrieve patient data
+        HashMap<String, String> data = fh.parse(fileName);  // Retrieve patient data
         String field;  // Temp string to hold current field
         
         // --- Set up structural elements ---------------------------------------------------------
@@ -59,7 +63,6 @@ public class PatientDetailsDisplay extends Application {
         VBox column1 = new VBox(10);
         VBox column2 = new VBox(10);
         VBox column3 = new VBox(10);
-        
         
         // --- Account details --------------------------------------------------------------------
         VBox accountDetails = new VBox(10);
@@ -86,7 +89,7 @@ public class PatientDetailsDisplay extends Application {
         adEmailField.setPromptText("Enter email...");
         
         // If existing email exists, display it
-        field = data.get("email");
+        field = data.get("Email");
         if (field != null) {
         	adEmailField.setText(field);
         }
@@ -100,7 +103,7 @@ public class PatientDetailsDisplay extends Application {
         adPhoneField.setPromptText("Enter phone number...");
         
         // If existing phone number exists, display it
-        field = data.get("phone number");
+        field = data.get("Phone number");
         if (field != null) {
         	adPhoneField.setText(field);
         }
@@ -133,17 +136,78 @@ public class PatientDetailsDisplay extends Application {
         adUpdate.setPrefHeight(20);
         adUpdate.setText("Update");
         adUpdate.setOnAction(new EventHandler<>() {
-            public void handle(ActionEvent event) {
+            public void handle(ActionEvent event) {        	
+            	// HashMaps for data
+            	HashMap<String, String> toUpdate = new HashMap<String, String>();
+            	HashMap<String, String> toRemove = new HashMap<String, String>();
+            	
+            	// If username is not set, show an error
+            	if (adUsernameField.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Username is not set");
+                	alert.showAndWait();
+                	return;
+                	
+            	} else {
+            		//toUpdate.put("Username", adUsernameField.getText());
+            	}
+            	
+            	// Email checkers
+            	Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
+                Matcher matcher = pattern.matcher(adEmailField.getText());
+                
+                // If email formatted correctly, add to 'toUpdate'
+                if (matcher.matches()) {
+                	toUpdate.put("Email", adEmailField.getText());
+                	
+                	// If not, display alert and interrupt function flow
+                } else {
+                	Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Email is wrongly formatted");
+                	alert.showAndWait();
+                	return;
+                }
+                
+                // If phone number is not set, show an error
+            	if (adPhoneField.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Phone number is not set");
+                	alert.showAndWait();
+                	return;
+                	
+            	} else {
+            		toUpdate.put("Phone number", adPhoneField.getText());
+            	}
+            	
+            	System.out.println(adPasswordField.getText());
+            	
+            	// If password is not set, ignore it
+            	if (adPasswordField.getText().equals("")) {
+            		
+            	// If passwords do not match, display an error
+            	} else if (!adPasswordField.getText().equals(adRepeatPasswordField.getText())){
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Passwords do not match");
+                	alert.showAndWait();
+                	return;
+                
+            	// If password is set, add it to 'toUpdate'
+            	} else {
+            		toUpdate.put("Password", adPasswordField.getText());
+            	}
+            	
+            	fh.updateAttrs(fileName, toUpdate);
+            	
                 System.out.println("Updated!");
             }
         });
         accountDetails.getChildren().addAll(adTitle, adUsername, adUsernameField, adEmail, adEmailField, adPhone, adPhoneField, adHbox1, adUpdate);
         
-        
-        
-        /*
-		 *	Personal Details
-		*/
+        // --- Personal details -------------------------------------------------------------------
         VBox personalDetails = new VBox(10);
         personalDetails.setStyle("-fx-border-color: gray; -fx-border-width: 2px;");
         personalDetails.setPadding(new Insets(10)); 
@@ -153,6 +217,7 @@ public class PatientDetailsDisplay extends Application {
         
         HBox pdHbox1 = new HBox(10);
         
+        // --- First name -------------------------------------------------------------------------
         VBox pdFirstNameVbox = new VBox(10);
         Label pdFirstName = new Label("First name");
         pdFirstName.setFont(Font.font("Arial", 12));
@@ -161,6 +226,13 @@ public class PatientDetailsDisplay extends Application {
         pdFirstNameField.setPromptText("Enter first name...");
         pdFirstNameVbox.getChildren().addAll(pdFirstName, pdFirstNameField);
         
+        // If existing first name exists, display it
+        field = data.get("First name");
+        if (field != null) {
+        	pdFirstNameField.setText(field);
+        }
+        
+        // --- Last name --------------------------------------------------------------------------
         VBox pdLastNameVbox = new VBox(10);
         Label pdLastName = new Label("Last name");
         pdLastName.setFont(Font.font("Arial", 12));
@@ -169,18 +241,33 @@ public class PatientDetailsDisplay extends Application {
         pdLastNameField.setPromptText("Enter last name...");
         pdLastNameVbox.getChildren().addAll(pdLastName, pdLastNameField);
         
+        // If existing last name exists, display it
+        field = data.get("Last name");
+        if (field != null) {
+        	pdLastNameField.setText(field);
+        }
+        
         pdHbox1.getChildren().addAll(pdFirstNameVbox, pdLastNameVbox);
         
         HBox pdHbox2 = new HBox(10);
         
+        // --- Middle name ------------------------------------------------------------------------
         VBox pdMiddleNameVbox = new VBox(10);
         Label pdMiddleName = new Label("Middle name(s)");
         pdMiddleName.setFont(Font.font("Arial", 12));
         TextField pdMiddleNameField = new TextField();
         pdMiddleNameField.setMinWidth(100);
         pdMiddleNameField.setPromptText("Enter middle name(s)...");
+        
+        // If existing middle name exists, display it
+        field = data.get("Middle name");
+        if (field != null) {
+        	pdMiddleNameField.setText(field);
+        }
+        
         pdMiddleNameVbox.getChildren().addAll(pdMiddleName, pdMiddleNameField);
         
+        // --- Sex --------------------------------------------------------------------------------
         VBox pdSexVbox = new VBox(10);
         Label pdSex = new Label("Sex");
         pdSex.setFont(Font.font("Arial", 12));
@@ -189,29 +276,57 @@ public class PatientDetailsDisplay extends Application {
         pdSexList.getItems().addAll("Female", "Male","Other");
         pdSexVbox.getChildren().addAll(pdSex, pdSexList);
         
+        // If existing sex exists, display it
+        field = data.get("Sex");
+        if (field != null) {
+        	pdSexList.getSelectionModel().select(field);
+        }
+        
         pdHbox2.getChildren().addAll(pdMiddleNameVbox, pdSexVbox);
         
+        // --- Date of birth ----------------------------------------------------------------------
         Label pdDateOfBirth = new Label("Date of Birth");
         pdDateOfBirth.setFont(Font.font("Arial", 12));
         
         HBox pdHbox3 = new HBox(10);
         
+        // --- Month of birth ---------------------------------------------------------------------
         ComboBox pdDateOfBirthList = new ComboBox();
         pdDateOfBirthList.setPromptText("Month");
         pdDateOfBirthList.getItems().addAll("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+        // If existing month exists, display it
+        field = data.get("DOB Month");
+        if (field != null) {
+        	pdDateOfBirthList.getSelectionModel().select(field);
+        }
         
+        // --- Day of birth -----------------------------------------------------------------------
         ComboBox pdDayList = new ComboBox();
         pdDayList.setPromptText("Day");
         pdDayList.getItems().addAll("1", "2","3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31");
         
+        // If existing day exists, display it
+        field = data.get("DOB Day");
+        if (field != null) {
+        	pdDayList.getSelectionModel().select(field);
+        }
+        
+        // --- Year of birth ----------------------------------------------------------------------
         ComboBox pdYearList = new ComboBox();
         pdYearList.setPromptText("Year");
         for (int i = 1900; i <= 2022; i++) {
         	pdYearList.getItems().add(i);
         }
         
+        // If existing year exists, display it
+        field = data.get("DOB Year");
+        if (field != null) {
+        	pdYearList.getSelectionModel().select(field);
+        }
+        
         pdHbox3.getChildren().addAll(pdDateOfBirthList, pdDayList, pdYearList);
         
+        // --- Address 1 --------------------------------------------------------------------------
         Label pdAddressLine1 = new Label("Address line 1");
         pdAddressLine1.setFont(Font.font("Arial", 12));
         
@@ -219,6 +334,13 @@ public class PatientDetailsDisplay extends Application {
         pdAddressLine1Field.setMinWidth(300);
         pdAddressLine1Field.setPromptText("Enter address 1...");
         
+        // If existing address 1 exists, display it
+        field = data.get("Address 1");
+        if (field != null) {
+        	pdAddressLine1Field.setText(field);
+        }
+        
+        // --- Address 2 --------------------------------------------------------------------------
         Label pdAddressLine2 = new Label("Address line 2");
         pdAddressLine2.setFont(Font.font("Arial", 12));
         
@@ -226,8 +348,15 @@ public class PatientDetailsDisplay extends Application {
         pdAddressLine2Field.setMinWidth(300);
         pdAddressLine2Field.setPromptText("Enter address 2 (optional)...");
         
+        // If existing address 2 exists, display it
+        field = data.get("Address 2");
+        if (field != null) {
+        	pdAddressLine2Field.setText(field);
+        }
+        
         HBox pdHbox4 = new HBox(10);
         
+        // --- State ------------------------------------------------------------------------------
         VBox pdStateVbox = new VBox(10);
         Label pdState = new Label("State");
         pdState.setFont(Font.font("Arial", 12));
@@ -244,6 +373,13 @@ public class PatientDetailsDisplay extends Application {
         	);
         pdStateVbox.getChildren().addAll(pdState, pdStateList);
         
+        // If existing state exists, display it
+        field = data.get("State");
+        if (field != null) {
+        	pdStateList.getSelectionModel().select(field);
+        }
+        
+        // --- Postal code ------------------------------------------------------------------------
         VBox pdPostalCodeVbox = new VBox(10);
         Label pdPostalCode = new Label("Postal Code");
         pdPostalCode.setFont(Font.font("Arial", 12));
@@ -252,10 +388,19 @@ public class PatientDetailsDisplay extends Application {
         pdPostalCodeField.setPromptText("Enter postal code...");
         pdPostalCodeVbox.getChildren().addAll(pdPostalCode, pdPostalCodeField);
         
+        // If existing postal code exists, display it
+        field = data.get("Postal code");
+        if (field != null) {
+        	pdPostalCodeField.setText(field);
+        }
+        
         pdHbox4.getChildren().addAll(pdStateVbox, pdPostalCodeVbox);
         
+        
+        // --- Data retain checkbox ---------------------------------------------------------------
         CheckBox pdDataRetain = new CheckBox("I understand that this hospital will retain this data.");
         
+        // --- Update button ----------------------------------------------------------------------
         Button pdUpdate = new Button();
         pdUpdate.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
         pdUpdate.setPrefWidth(100);
@@ -266,6 +411,9 @@ public class PatientDetailsDisplay extends Application {
                 System.out.println("Updated!");
             }
         });
+        
+        // TODO DIEGO ADD INPUT VALIDATION AND UPDATING THE FILE
+        
         personalDetails.getChildren().addAll(pdTitle, pdHbox1, pdHbox2, pdDateOfBirth, pdHbox3, pdAddressLine1, pdAddressLine1Field, pdAddressLine2, pdAddressLine2Field, pdHbox4, pdDataRetain, pdUpdate);
         
         

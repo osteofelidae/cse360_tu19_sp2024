@@ -549,8 +549,8 @@ public class DoctorDetailsDisplay extends Application {
             public void handle(ActionEvent event) {
             	String[] filenames = {"Username", "Medication"};
             	String[] fields = {"dborgo", pmNameField.getText()};
-                //MedicationForm mf = new MedicationForm(filenames, fields, "dborgo");
-                //mf.addMedication();
+                MedicationForm mf = new MedicationForm(filenames, fields, "dborgo");
+                mf.addMedication();
             }
         });
         prescribeMedication.getChildren().addAll(pmTitle, pmName, pmNameField, pmSave);
