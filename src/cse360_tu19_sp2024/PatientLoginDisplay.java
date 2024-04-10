@@ -14,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import java.util.HashMap;
 import javafx.scene.layout.Pane; 
 
 // Represents the PatientLoginDisplay
@@ -68,20 +69,40 @@ public class PatientLoginDisplay extends LoginDisplay {
         Hyperlink newPatient = new Hyperlink("New patient? Take me to sign up >");
         Hyperlink back = new Hyperlink("Back to login selection");
         
-        newPatient.setOnAction(new EventHandler<>() {
-            public void handle(ActionEvent event) {
-                System.out.println("Opening Patient Signup Display!");
-                PatientSignupDisplay patientSignup = new PatientSignupDisplay();
-                patientSignup.start(primaryStage);
+        login.setOnAction(event -> {
+            // Open another display
+            System.out.println("validating login");
+            
+            String[] userpass = {"username", "password"};
+            String[] immediates = {userField.getText(), passField.getText()};
+            
+            PatientLoginForm newform = new PatientLoginForm(userField.getText(), userpass, immediates, userField.getText());
+            if (newform.validateUserLogin()) {
+            	//go to patient view
+            	System.out.println("success, now lets go to patient view");
+            	
+            } else {
+            	//display some sort of error
+            	System.out.println("Incorrect username or password");
             }
+                        
         });
         
-        back.setOnAction(new EventHandler<>() {
-            public void handle(ActionEvent event) {
-                System.out.println("Opening Login Display!");
-                LoginDisplay loginDisplay = new LoginDisplay();
-                loginDisplay.start(primaryStage);
-            }
+        
+        
+        
+        newPatient.setOnAction(event -> {
+            // Open another display
+            System.out.println("Switching to patient sign up");
+            PatientSignupDisplay newsignup = new PatientSignupDisplay();
+            newsignup.start(primaryStage);
+        });
+        
+        back.setOnAction(event -> {
+            // Open another display
+            System.out.println("Back to main select");
+            LoginDisplay newmain = new LoginDisplay();
+            newmain.start(primaryStage);
         });
         
         HBox inputBoxes = new HBox(10);
