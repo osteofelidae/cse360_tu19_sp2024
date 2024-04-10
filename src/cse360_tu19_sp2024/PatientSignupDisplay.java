@@ -14,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.Pane; 
 
@@ -187,6 +188,7 @@ public class PatientSignupDisplay extends LoginDisplay {
         		statePostalInputs, consent, signUpButton, back);
        
         Scene scene = new Scene(this.getPane(), 500, 650);
+      
         primaryStage.setScene(scene);
         primaryStage.show();
     }

@@ -47,8 +47,8 @@ public class PatientLoginDisplay extends LoginDisplay {
         	        "Password"
         	    };
         	String[] fields = parse();
-        	PatientSignupForm form = new PatientSignupForm(fieldnames, fields);
-            if (form.validateUserSignup()) {
+        	PatientLoginForm form = new PatientLoginForm(fieldnames, fields, user.getText());
+            if (form.validateUserLogin()) {
             	//go to patient view
             	PatientDisplay patient = new PatientDisplay();
             	System.out.println("Opening Patient Display!");
