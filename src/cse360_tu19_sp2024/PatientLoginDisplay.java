@@ -1,4 +1,4 @@
-package asuHelloWorldJavaFX;
+package cse360_tu19_sp2024;
 
 import javafx.scene.Scene;
 
