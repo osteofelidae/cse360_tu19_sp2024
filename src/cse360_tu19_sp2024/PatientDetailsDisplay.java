@@ -24,7 +24,7 @@ import java.util.HashMap;
 public class PatientDetailsDisplay extends Application {
 	
 	// === INSTANCE VARAIBLES =====================================================================
-	private String username = "12345";
+	private String username = "dborgo";  // TODO temp thing for testing
     
 	
 	// === MAIN DRIVER ============================================================================
@@ -60,7 +60,6 @@ public class PatientDetailsDisplay extends Application {
         VBox column2 = new VBox(10);
         VBox column3 = new VBox(10);
         
-        
         // --- Account details --------------------------------------------------------------------
         VBox accountDetails = new VBox(10);
         accountDetails.setStyle("-fx-border-color: gray; -fx-border-width: 2px;");
@@ -86,7 +85,7 @@ public class PatientDetailsDisplay extends Application {
         adEmailField.setPromptText("Enter email...");
         
         // If existing email exists, display it
-        field = data.get("email");
+        field = data.get("Email");
         if (field != null) {
         	adEmailField.setText(field);
         }
@@ -100,7 +99,7 @@ public class PatientDetailsDisplay extends Application {
         adPhoneField.setPromptText("Enter phone number...");
         
         // If existing phone number exists, display it
-        field = data.get("phone number");
+        field = data.get("Phone number");
         if (field != null) {
         	adPhoneField.setText(field);
         }
@@ -134,16 +133,13 @@ public class PatientDetailsDisplay extends Application {
         adUpdate.setText("Update");
         adUpdate.setOnAction(new EventHandler<>() {
             public void handle(ActionEvent event) {
+            	
                 System.out.println("Updated!");
             }
         });
         accountDetails.getChildren().addAll(adTitle, adUsername, adUsernameField, adEmail, adEmailField, adPhone, adPhoneField, adHbox1, adUpdate);
         
-        
-        
-        /*
-		 *	Personal Details
-		*/
+        // --- Personal details -------------------------------------------------------------------
         VBox personalDetails = new VBox(10);
         personalDetails.setStyle("-fx-border-color: gray; -fx-border-width: 2px;");
         personalDetails.setPadding(new Insets(10)); 
@@ -153,6 +149,7 @@ public class PatientDetailsDisplay extends Application {
         
         HBox pdHbox1 = new HBox(10);
         
+        // --- First name -------------------------------------------------------------------------
         VBox pdFirstNameVbox = new VBox(10);
         Label pdFirstName = new Label("First name");
         pdFirstName.setFont(Font.font("Arial", 12));
@@ -161,6 +158,13 @@ public class PatientDetailsDisplay extends Application {
         pdFirstNameField.setPromptText("Enter first name...");
         pdFirstNameVbox.getChildren().addAll(pdFirstName, pdFirstNameField);
         
+        // If existing first name exists, display it
+        field = data.get("First name");
+        if (field != null) {
+        	pdFirstNameField.setText(field);
+        }
+        
+        // --- Last name --------------------------------------------------------------------------
         VBox pdLastNameVbox = new VBox(10);
         Label pdLastName = new Label("Last name");
         pdLastName.setFont(Font.font("Arial", 12));
@@ -169,18 +173,33 @@ public class PatientDetailsDisplay extends Application {
         pdLastNameField.setPromptText("Enter last name...");
         pdLastNameVbox.getChildren().addAll(pdLastName, pdLastNameField);
         
+        // If existing last name exists, display it
+        field = data.get("Last name");
+        if (field != null) {
+        	pdLastNameField.setText(field);
+        }
+        
         pdHbox1.getChildren().addAll(pdFirstNameVbox, pdLastNameVbox);
         
         HBox pdHbox2 = new HBox(10);
         
+        // --- Middle name ------------------------------------------------------------------------
         VBox pdMiddleNameVbox = new VBox(10);
         Label pdMiddleName = new Label("Middle name(s)");
         pdMiddleName.setFont(Font.font("Arial", 12));
         TextField pdMiddleNameField = new TextField();
         pdMiddleNameField.setMinWidth(100);
         pdMiddleNameField.setPromptText("Enter middle name(s)...");
+        
+        // If existing first name exists, display it
+        field = data.get("Middle name");
+        if (field != null) {
+        	pdMiddleNameField.setText(field);
+        }
+        
         pdMiddleNameVbox.getChildren().addAll(pdMiddleName, pdMiddleNameField);
         
+        // --- Sex --------------------------------------------------------------------------------
         VBox pdSexVbox = new VBox(10);
         Label pdSex = new Label("Sex");
         pdSex.setFont(Font.font("Arial", 12));
@@ -189,8 +208,15 @@ public class PatientDetailsDisplay extends Application {
         pdSexList.getItems().addAll("Female", "Male","Other");
         pdSexVbox.getChildren().addAll(pdSex, pdSexList);
         
+        // If existing first name exists, display it
+        field = data.get("Sex");
+        if (field != null) {
+        	pdSexList.getSelectionModel().select(field);
+        }
+        
         pdHbox2.getChildren().addAll(pdMiddleNameVbox, pdSexVbox);
         
+        // --- Date of birth ----------------------------------------------------------------------
         Label pdDateOfBirth = new Label("Date of Birth");
         pdDateOfBirth.setFont(Font.font("Arial", 12));
         
