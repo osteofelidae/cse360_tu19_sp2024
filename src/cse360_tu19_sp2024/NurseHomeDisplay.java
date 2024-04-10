@@ -16,7 +16,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 
-public class RetrievePatientDisplay extends Application {
+public class NurseHomeDisplay extends Application {
 
     TextField emailField, passField, repPassField, firstNameField, lastNameField, middleNameField;
 
