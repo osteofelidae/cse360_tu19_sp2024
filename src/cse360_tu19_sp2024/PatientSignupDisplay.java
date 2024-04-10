@@ -1,9 +1,15 @@
 package cse360_tu19_sp2024;
 
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
@@ -83,11 +89,11 @@ public class PatientSignupDisplay extends LoginDisplay {
         for (int i = 1; i <= 31; i++) {
             dobDay.getItems().add(i);
         }
-        ComboBox dobYear = new ComboBox();
+        dobYear = new ComboBox();
         for (int i = 1900; i <= 2022; i++) {
             dobYear.getItems().add(i);
         }
-        ComboBox state = new ComboBox();
+        state = new ComboBox();
         state.getItems().addAll(
         	    "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",
         	    "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
@@ -110,35 +116,164 @@ public class PatientSignupDisplay extends LoginDisplay {
         signUpButton.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
         signUpButton.setPrefWidth(100);
         signUpButton.setOnAction(e -> {
-        	String[] fieldnames = {
-        	        "Email",
-        	        "Password",
-        	        "Repeat Password",
-        	        "First Name",
-        	        "Last Name",
-        	        "Middle Name",
-        	        "Sex",
-        	        "Date of Birth",
-        	        "Address Line 1",
-        	        "Address Line 2",
-        	        "State",
-        	        "Postal Code"
-        	    };
+        	HashMap<String, String> data = new HashMap<String, String>();
         	
-            try {
-            	String[] fields = parse();
-            	PatientSignupForm form = new PatientSignupForm(fieldnames, fields, "temp");
-            	if(form.validateUserSignup()) {
-            	//go to patient view
-            	//PatientDisplay patient = new PatientDisplay();
-            	System.out.println("Opening Patient Display!");
-            	//patient.start(primaryStage);
-            	}
+        	// --- Check if email is formatted to be an email -------------------------------------
+        	Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
+            Matcher matcher = pattern.matcher(email.getText());
+            
+            // If formatted correctly, add to 'data'
+            if (matcher.matches()) {
+            	data.put("Email", email.getText());
             	
-            } catch(Exception exe) {
-            	//display some sort of error
-            	System.out.println("Error.");
-            };
+            	// If not, display alert and interrupt function flow
+            } else {
+            	Alert alert = new Alert(AlertType.ERROR);
+            	alert.setHeaderText("Invalid input");
+            	alert.setContentText("Email is wrongly formatted");
+            	alert.showAndWait();
+            	return;
+            }
+        	
+            // --- Check if password matches ------------------------------------------------------
+            // If password is empty or default, display alert and interrupt function flow
+            if (pass.getText() == null || pass.getText().equals("Enter password...")) {
+	        	Alert alert = new Alert(AlertType.ERROR);
+	        	alert.setHeaderText("Invalid input");
+	        	alert.setContentText("Please set password");
+	        	alert.showAndWait();
+	        	return;
+            	
+            // If passwords do not match, display alert and interrupt function flow
+            } else if (!pass.getText().equals(passRepeat.getText())) {
+            	Alert alert = new Alert(AlertType.ERROR);
+            	alert.setHeaderText("Invalid input");
+            	alert.setContentText("Passwords do not match");
+            	alert.showAndWait();
+            	return;
+            	
+            // If password input is valid, add to'data'
+            } else {
+            	data.put("Password", pass.getText());
+            }
+            
+            // --- Check if first name and last name are not empty --------------------------------
+            // If first name is empty or not set, display alert and interrupt function flow
+            if (firstName.getText() == null || firstName.getText().equals("Enter first name...")) {
+            	Alert alert = new Alert(AlertType.ERROR);
+            	alert.setHeaderText("Invalid input");
+            	alert.setContentText("Please set first name");
+            	alert.showAndWait();
+            	return;
+            
+            // If first name input is valid, add to'data'
+            } else {
+            	data.put("First name", firstName.getText());
+            }
+            
+            // If last name is empty or not set, display alert and interrupt function flow
+            if (lastName.getText() == null || lastName.getText().equals("Enter last name...")) {
+            	Alert alert = new Alert(AlertType.ERROR);
+            	alert.setHeaderText("Invalid input");
+            	alert.setContentText("Please set last name");
+            	alert.showAndWait();
+            	return;
+            
+            // If last name input is valid, add to'data'
+            } else {
+            	data.put("Last name", lastName.getText());
+            }
+        	
+            // --- Check if DOB combo boxes are set -----------------------------------------------
+            // If DOB month is not set, display alert and interrupt function flow
+            if (dobMonth.getSelectionModel().isEmpty()) {
+            	Alert alert = new Alert(AlertType.ERROR);
+            	alert.setHeaderText("Invalid input");
+            	alert.setContentText("DOB Month is not set");
+            	alert.showAndWait();
+            	return;
+            	
+            // If DOB month input is valid, add to'data'
+            } else {
+            	data.put("DOB Month", dobMonth.getValue().toString());
+            }
+            
+            // If DOB day is not set, display alert and interrupt function flow
+            if (dobDay.getSelectionModel().isEmpty()) {
+            	Alert alert = new Alert(AlertType.ERROR);
+            	alert.setHeaderText("Invalid input");
+            	alert.setContentText("DOB Day is not set");
+            	alert.showAndWait();
+            	return;
+            	
+            // If DOB day input is valid, add to'data'
+            } else {
+            	data.put("DOB Day", dobDay.getValue().toString());
+            }
+            
+            // If DOB year is not set, display alert and interrupt function flow
+            if (dobYear.getSelectionModel().isEmpty()) {
+            	Alert alert = new Alert(AlertType.ERROR);
+            	alert.setHeaderText("Invalid input");
+            	alert.setContentText("DOB Year is not set");
+            	alert.showAndWait();
+            	return;
+            	
+            // If DOB year input is valid, add to'data'
+            } else {
+            	data.put("DOB Year", dobYear.getValue().toString());
+            }
+        	
+            // --- Check if address is set --------------------------------------------------------
+            // If address is not set, display alert and interrupt function flow
+            if (address1.getText() == null || address1.getText().equals("Enter address 1...")) {
+            	Alert alert = new Alert(AlertType.ERROR);
+            	alert.setHeaderText("Invalid input");
+            	alert.setContentText("Please set Address 1");
+            	alert.showAndWait();
+            	return;
+            	
+            // If Address 1 input is valid, add to'data'
+            } else {
+            	data.put("Address 1", address1.getText());
+            }
+            
+            // If Address 2 is set, add to 'data'
+            if (address2.getText() != null && !address2.getText().equals("Enter address 2 (optional)...")) {
+            	data.put("Address 2", address2.getText());
+            }
+        	
+        	// --- Check if state is set ----------------------------------------------------------
+        	// If state is not set, display alert and interrupt function flow
+        	if (state.getSelectionModel().isEmpty()) {
+        		Alert alert = new Alert(AlertType.ERROR);
+            	alert.setHeaderText("Invalid input");
+            	alert.setContentText("State is not set");
+            	alert.showAndWait();
+            	return;
+        		
+        	// If state input is valid, add to'data'
+            } else {
+           		data.put("State", (String) state.getValue());
+            }
+        	
+        	// --- Check if postal code is set ----------------------------------------------------
+        	// If postal code is set, add to 'data'
+            if (postalCode.getText() != null) {
+            	data.put("Postal code", postalCode.getText());
+            	
+            // If not, display alert and interrupt function flow
+            } else {
+            	Alert alert = new Alert(AlertType.ERROR);
+            	alert.setHeaderText("Invalid input");
+            	alert.setContentText("Address 1 cannot be empty");
+            	alert.showAndWait();
+            	return;
+            }
+        	
+            // Save to file
+        	FileHandler fh = new FileHandler();
+        	fh.save("patient.txt", data);  // TODO make a unique filename
         });
 
         email.setPrefWidth(250);
@@ -200,6 +335,7 @@ public class PatientSignupDisplay extends LoginDisplay {
 		return pane;
 	}
     
+    // NOW DEPRECIATED
     public String[] parse() {
     	String[] info = {
     	        email.getText(),
