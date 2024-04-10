@@ -1,0 +1,12 @@
+Email: dborgo@asu.edu
+Address 2: 
+Username: dborgo
+DOB Month: October
+State: California
+Address 1: 9741 Caminito Doha
+First name: Diego
+DOB Day: 14
+Last name: Borgo
+Postal code: 92131
+DOB Year: 2004
+Password: 1234
