@@ -29,7 +29,6 @@ public class PatientDetailsDisplay extends Application {
 	
 	// === INSTANCE VARAIBLES =====================================================================
 	private String username = "johndoe";  // TODO temp thing for testing
-    
 	
 	// === MAIN DRIVER ============================================================================
     public static void main(String[] args) {
@@ -137,8 +136,7 @@ public class PatientDetailsDisplay extends Application {
         adUpdate.setPrefHeight(20);
         adUpdate.setText("Update");
         adUpdate.setOnAction(new EventHandler<>() {
-            public void handle(ActionEvent event) {
-            	
+            public void handle(ActionEvent event) {        	
             	// HashMaps for data
             	HashMap<String, String> toUpdate = new HashMap<String, String>();
             	HashMap<String, String> toRemove = new HashMap<String, String>();

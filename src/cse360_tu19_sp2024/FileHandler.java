@@ -58,14 +58,14 @@ public class FileHandler {
     	HashMap<String, String> information = this.parse(fileName);
     	return information.get(attr);
     }
-    
+
     // Update attribute attr to value, or create it if it does not exist
     public void updateAttr(String fileName, String attr, String value) {
     	HashMap<String, String> information = this.parse(fileName);
     	information.put(attr, value);
     	this.save(fileName, information);
     }
-    
+
     // Update multiple attributes
     public void updateAttrs(String fileName, HashMap<String, String> attr) {
     	HashMap<String, String> information = this.parse(fileName);
@@ -88,4 +88,5 @@ public class FileHandler {
     	}
     	this.save(fileName, information);
     }
+
 }

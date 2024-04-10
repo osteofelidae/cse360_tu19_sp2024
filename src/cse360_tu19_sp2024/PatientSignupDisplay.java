@@ -66,8 +66,6 @@ public class PatientSignupDisplay extends LoginDisplay {
         detailsSectionLabel.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         fnameLabel.setFont(Font.font("Times New Roman"));
         lnameLabel.setFont(Font.font("Times New Roman"));
-        mnameLabel.setFont(Font.font("Times New Roman"));
-        sexLabel.setFont(Font.font("Times New Roman"));
         dobLabel.setFont(Font.font("Times New Roman"));
         address1Label.setFont(Font.font("Times New Roman"));
         address2Label.setFont(Font.font("Times New Roman"));
@@ -368,7 +366,6 @@ public class PatientSignupDisplay extends LoginDisplay {
         passRepeat.setPrefWidth(250);
         firstName.setPrefWidth(250);
         lastName.setPrefWidth(250);
-        middleName.setPrefWidth(250);
         address1.setPrefWidth(250);
         address2.setPrefWidth(250);
         postalCode.setPrefWidth(250);
