@@ -3,6 +3,7 @@ package cse360_tu19_sp2024;
 import javafx.scene.Scene;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.stage.Stage;
 import javafx.scene.layout.VBox;
 import javafx.event.ActionEvent;
@@ -85,6 +86,7 @@ public class StaffLoginDisplay extends LoginDisplay {
         pane.getChildren().addAll(title, inputBoxes, login, message, back);
 
         Scene scene = new Scene(pane, 400, 250);
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
