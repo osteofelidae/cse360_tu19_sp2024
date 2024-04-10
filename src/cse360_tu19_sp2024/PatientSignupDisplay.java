@@ -1,5 +1,7 @@
 package asuHelloWorldJavaFX;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,21 +15,24 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.scene.control.CheckBox;
+import javafx.scene.layout.Pane; 
 
 // Represents the Receptionist View
 public class PatientSignupDisplay extends LoginDisplay {
-
+	VBox pane;
     TextField email, pass, passRepeat, firstName, lastName, 
-    	middleName, sex, birthMonth, birthDay, birthYear, address1, 
-    	address2, state, postalCode;
+    	middleName, address1, 
+    	address2, postalCode;
+    
+    ComboBox sexList, state, dobDay, dobMonth, dobYear;
 
     // Starts the PatientSignupDisplay View
     public void start(Stage primaryStage) {
 
         primaryStage.setTitle("Patient Signup");
-
-        VBox root = new VBox(10);
-        root.setPadding(new Insets(20));
+        
+        pane = new VBox(10);
+        pane.setPadding(new Insets(20));
         
         Label title = new Label("Signup");
         Label emailLabel = new Label("Email");
@@ -69,11 +74,11 @@ public class PatientSignupDisplay extends LoginDisplay {
         address2 = new TextField("Enter address 2 (optional)...");
         postalCode = new TextField("Enter postal code...");
         
-        ComboBox sexList = new ComboBox();
+        sexList = new ComboBox();
         sexList.getItems().addAll("Female", "Male","Other");
-        ComboBox dobMonth = new ComboBox();
+        dobMonth = new ComboBox();
         dobMonth.getItems().addAll("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
-        ComboBox dobDay = new ComboBox();
+        dobDay = new ComboBox();
         for (int i = 1; i <= 31; i++) {
             dobDay.getItems().add(i);
         }
@@ -103,7 +108,34 @@ public class PatientSignupDisplay extends LoginDisplay {
         Button signUpButton = new Button("Sign Up");
         signUpButton.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
         signUpButton.setPrefWidth(100);
-        //save.setOnAction(e -> savePatientIntake());
+        signUpButton.setOnAction(e -> {
+        	String[] fieldnames = {
+        	        "Email",
+        	        "Password",
+        	        "Repeat Password",
+        	        "First Name",
+        	        "Last Name",
+        	        "Middle Name",
+        	        "Sex",
+        	        "Date of Birth",
+        	        "Address Line 1",
+        	        "Address Line 2",
+        	        "State",
+        	        "Postal Code"
+        	    };
+        	String[] fields = parse();
+        	PatientSignupForm form = new PatientSignupForm(fieldnames, fields);
+            if (form.validateUserSignup()) {
+            	//go to patient view
+            	PatientDisplay patient = new PatientDisplay();
+            	System.out.println("Opening Patient Display!");
+            	patient.start(primaryStage);
+            	
+            } else {
+            	//display some sort of error
+            	System.out.println("Error.");
+            }
+        });
 
         email.setPrefWidth(250);
         pass.setPrefWidth(250);
@@ -116,6 +148,14 @@ public class PatientSignupDisplay extends LoginDisplay {
         postalCode.setPrefWidth(250);
         
         Hyperlink back = new Hyperlink("Take me to login > ");
+        
+        back.setOnAction(new EventHandler<>() {
+            public void handle(ActionEvent event) {
+                System.out.println("Opening Login Display!");
+                LoginDisplay loginDisplay = new LoginDisplay();
+                loginDisplay.start(primaryStage);
+            }
+        });
         
         VBox pass1 = new VBox(10);
         pass1.getChildren().addAll(passLabel, pass);
@@ -141,14 +181,36 @@ public class PatientSignupDisplay extends LoginDisplay {
         HBox statePostalInputs = new HBox(10);
         statePostalInputs.getChildren().addAll(stateBox, postalBox);
         
-        root.getChildren().addAll(title, emailLabel, email, passwordInputs,
+        pane.getChildren().addAll(title, emailLabel, email, passwordInputs,
         		detailsSectionLabel, nameInputs, dobLabel, dob, 
         		address1Label, address1, address2Label, address2,
         		statePostalInputs, consent, signUpButton, back);
-
-        Scene scene = new Scene(root, 500, 650);
+       
+        Scene scene = new Scene(this.getPane(), 500, 650);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+    
+    public Pane getPane() {
+		return pane;
+	}
+    
+    public String[] parse() {
+    	String[] info = {
+    	        email.getText(),
+    	        pass.getText(),
+    	        passRepeat.getText(),
+    	        firstName.getText(),
+    	        lastName.getText(),
+    	        middleName.getText(),
+    	        sexList.getSelectionModel().getSelectedItem().toString(),
+    	        dobMonth.getValue() + " " + dobDay.getValue() + ", " + dobYear.getValue(),
+    	        address1.getText(),
+    	        address2.getText(),
+    	        state.getSelectionModel().getSelectedItem().toString(),
+    	        postalCode.getText()
+    	    };
+    	return info;
     }
 
 }

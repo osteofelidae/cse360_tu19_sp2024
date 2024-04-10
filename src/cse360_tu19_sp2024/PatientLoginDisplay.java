@@ -14,18 +14,20 @@ import javafx.scene.layout.HBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.layout.Pane; 
 
 // Represents the PatientLoginDisplay
 public class PatientLoginDisplay extends LoginDisplay {
     TextField userField, passField;
+    VBox pane;
 
     // Starts the PatientLoginDisplay
     public void start(Stage primaryStage) {
 
         primaryStage.setTitle("Patient Login");
 
-        VBox root = new VBox(10);
-        root.setPadding(new Insets(20));
+        pane = new VBox(10);
+        pane.setPadding(new Insets(20));
 
         userField = new TextField("Enter username...");
         passField = new TextField("Enter password...");
@@ -39,7 +41,24 @@ public class PatientLoginDisplay extends LoginDisplay {
         pass.setFont(Font.font("Times New Roman"));
 
         Button login = new Button("Login");
-        //login.setOnAction(e -> viewScanReport());
+        login.setOnAction(e -> {
+        	String[] fieldnames = {
+        	        "Username",
+        	        "Password"
+        	    };
+        	String[] fields = parse();
+        	PatientSignupForm form = new PatientSignupForm(fieldnames, fields);
+            if (form.validateUserSignup()) {
+            	//go to patient view
+            	PatientDisplay patient = new PatientDisplay();
+            	System.out.println("Opening Patient Display!");
+            	patient.start(primaryStage);
+            	
+            } else {
+            	//display some sort of error
+            	System.out.println("Invalid username or password.");
+            }
+        });
 
         
         login.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
@@ -70,10 +89,19 @@ public class PatientLoginDisplay extends LoginDisplay {
         VBox passLabelandInput = new VBox(10, pass, passField);
         inputBoxes.getChildren().addAll(userLabelandInput, passLabelandInput);
 
-        root.getChildren().addAll(title, inputBoxes, login, newPatient, back);
+        pane.getChildren().addAll(title, inputBoxes, login, newPatient, back);
 
-        Scene scene = new Scene(root, 400, 250);
+        Scene scene = new Scene(pane, 400, 250);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+    
+    public Pane getPane() {
+		return pane;
+	}
+    
+    public String[] parse() {
+    	String[] info = {"w"};
+    	return info;
     }
 }
