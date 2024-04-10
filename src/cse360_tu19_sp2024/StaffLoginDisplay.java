@@ -42,7 +42,7 @@ public class StaffLoginDisplay extends LoginDisplay {
         title.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         user.setFont(Font.font("Times New Roman"));
         pass.setFont(Font.font("Times New Roman"));
-        
+      
         ComboBox staffSelect = new ComboBox();
         staffSelect.setPromptText("Select staff position");
         staffSelect.getItems().addAll("Nurse", "Doctor");
@@ -55,6 +55,7 @@ public class StaffLoginDisplay extends LoginDisplay {
         	    };
         try {
         	String[] fields = parse();
+
 //        	StaffLoginForm form = new StaffLoginForm(fieldnames, fields, user.getText());
 //            if (form.validateUserLogin()) {
         		if(staffSelect.getSelectionModel().getSelectedItem().toString().equals("Nurse")) {
