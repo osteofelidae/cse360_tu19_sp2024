@@ -1,5 +1,6 @@
 package cse360_tu19_sp2024;
 
+import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -7,12 +8,10 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
-
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MessagingDisplay extends LoginDisplay {
+public class MessagingDisplay extends Application {
 
     private ListView<String> userList;
     private TextArea chatArea;
@@ -85,24 +84,9 @@ public class MessagingDisplay extends LoginDisplay {
     // CHANGE FOR FINAL INTEGRATION
     private void updateChat(String selectedUser) {
         chatArea.clear();
-        
-        //NEW: RETRIEVE FROM FILE >>>>>>>>>>>>>>>>
-        FileHandler fh = new FileHandler();
-		String directory = "files/";
-		File directoryFile = new File(directory);
-		if (!directoryFile.exists()) {
-			directoryFile.mkdirs();
-		}
-		if (selectedUser != null) {
-			HashMap<String, String> data = fh.parse("files/allMessages");
-			for (HashMap.Entry<String, String> entry : data.entrySet()) {
-				if(entry.getKey() == "") { //UNFINISHED, check if to or from is current user, if so print message
-					chatArea.appendText(entry.getKey() + ": " + entry.getValue());
-				}
-	        }
-			
-		}
-        
+        if (selectedUser != null && chatHistory.containsKey(selectedUser)) {
+            chatArea.appendText(chatHistory.get(selectedUser).toString());
+        }
     }
     // CHANGE FOR FINAL INTEGRATION
     private void sendMessage() {
@@ -114,26 +98,10 @@ public class MessagingDisplay extends LoginDisplay {
             userChatHistory.append(formattedMessage);
             chatArea.appendText(formattedMessage);
             messageField.clear();
-            
-            
-            //NEW: SAVE TO FILE >>>>>>>>>>>>>>>>>>>.
-            String to = selectedUser;
-            String from = "from"; // TODO FIGURE OUT CURRENT ACCOUNT BEING USED
-            
-            HashMap<String, String> data = new HashMap<String, String>() {{
-                put("To", to);
-                put("From", from);
-                put("Message", message);
-            }};
-            
-            FileHandler fh = new FileHandler();
-    		String directory = "files/";
-    		File directoryFile = new File(directory);
-    		if (!directoryFile.exists()) {
-    			directoryFile.mkdirs();
-    		}
-    		fh.save("files/allMessages", data);
-            
         }
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
