@@ -5,8 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-
-import java.io.File;
 import java.util.HashMap;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
@@ -41,6 +39,7 @@ public abstract class Form {
 		this.fileName = fileName;
 		this.formPane = new Pane();
 		this.fields = fields.clone();
+    
 		this.fieldnames = fieldnames.clone();
 		this.textFields = new TextField[fields.length];
 		
@@ -49,7 +48,6 @@ public abstract class Form {
 			//System.out.println(fieldnames[i]);
 			//System.out.println(fields[i]);
 		}
-		
 		
 		// Create main vBox
 		this.vBox = new VBox(this.VBOX_VER_SPACING);
