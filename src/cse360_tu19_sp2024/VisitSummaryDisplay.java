@@ -271,7 +271,7 @@ public class VisitSummaryDisplay extends Application {
                 	display.start(primaryStage);
                 }
                 if(accessLevel == 'n') { //nurse home
-                	RetrievePatientDisplay display = new RetrievePatientDisplay();
+                	NurseHomeDisplay display = new NurseHomeDisplay();
                 	display.start(primaryStage);
                 }
             }
@@ -280,12 +280,12 @@ public class VisitSummaryDisplay extends Application {
         if(accessLevel == 'p'){
         	setEditable(false);
             
-            weightField.setText("180");
-            ftField.setText("5");
-            inField.setText("10");
-            tempField.setText("98");
-            firstField.setText("120");
-            secondField.setText("80");
+            weightField.setText("0");
+            ftField.setText("0");
+            inField.setText("0");
+            tempField.setText("0");
+            firstField.setText("0");
+            secondField.setText("0");
             notesField.setText("No notes.");
             
             allField.setText("No allergies.");
@@ -293,15 +293,82 @@ public class VisitSummaryDisplay extends Application {
             immField.setText("Fully vaccinated.");
             healField.setText("No previous health risks.");
             
+            HashMap<String, String> data = fh.parse(username);
+            if(fh.getAttr(username, "Weight") != null) {
+            	weightField.setText(data.get("Weight"));
+                ftField.setText(data.get("Feet"));
+                inField.setText(data.get("Inches"));
+                tempField.setText(data.get("Temperature"));
+                firstField.setText(data.get("Pressure1"));
+                secondField.setText(data.get("Pressure2"));
+            }
+            if(fh.getAttr(username, "Notes") != null) {
+                notesField.setText(data.get("Notes"));
+            }
+            if(fh.getAttr(username, "Allergies") != null) {
+                allField.setText(data.get("Allergies"));
+            }
+            if(fh.getAttr(username, "Medications") != null) {
+                medField.setText(data.get("Medications"));
+            }
+            if(fh.getAttr(username, "Immunizations") != null) {
+                immField.setText(data.get("Immunizations"));
+            }
+            if(fh.getAttr(username, "Concerns") != null) {
+                healField.setText(data.get("Concerns"));
+            }
+            
             buttons.getChildren().addAll(
             		home
             		);
         }
         else if(accessLevel == 'd'){ //doctor
+        	setEditable(false);
         	allField.setEditable(true);
             medField.setEditable(true);
             immField.setEditable(true);
             healField.setEditable(true);
+            
+            weightField.setText("0");
+            ftField.setText("0");
+            inField.setText("0");
+            tempField.setText("0");
+            firstField.setText("0");
+            secondField.setText("0");
+            notesField.setText("No notes.");
+            
+            allField.setText("No allergies.");
+            medField.setText("No medications.");
+            immField.setText("Fully vaccinated.");
+            healField.setText("No previous health risks.");
+            
+            HashMap<String, String> data = fh.parse(username);
+            if(fh.getAttr(username, "Weight") != null) {
+            	weightField.setText(data.get("Weight"));
+                ftField.setText(data.get("Feet"));
+                inField.setText(data.get("Inches"));
+                tempField.setText(data.get("Temperature"));
+                firstField.setText(data.get("Pressure1"));
+                secondField.setText(data.get("Pressure2"));
+            }
+            if(fh.getAttr(username, "Notes") != null) {
+                notesField.setText(data.get("Notes"));
+            }
+            if(fh.getAttr(username, "Allergies") != null) {
+                allField.setText(data.get("Allergies"));
+            }
+            if(fh.getAttr(username, "Medications") != null) {
+                medField.setText(data.get("Medications"));
+            }
+            if(fh.getAttr(username, "Immunizations") != null) {
+                immField.setText(data.get("Immunizations"));
+            }
+            if(fh.getAttr(username, "Concerns") != null) {
+                healField.setText(data.get("Concerns"));
+            }
+            
+            
+            
         	buttons.getChildren().addAll(
             		home,
             		save
