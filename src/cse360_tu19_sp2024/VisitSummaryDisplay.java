@@ -1,5 +1,7 @@
 package cse360_tu19_sp2024;
 
+import java.util.HashMap;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -15,15 +17,45 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.scene.control.TextArea;
 
 
-public class VisitSummaryDisplay extends LoginDisplay {
+public class VisitSummaryDisplay extends Application {
 
-    TextField emailField, passField, repPassField, firstNameField, lastNameField, middleNameField;
+    TextField weightField,
+    ftField,
+    inField,
+    tempField,
+    firstField,
+    secondField;
+	TextArea notesField, 
+	medField,
+	immField, 
+	healField, 
+	allField;
+    private char accessLevel;
+    String username;
+    
+    // === SET USERNAME ===========================================================================
+    // Usage: this must be used directly after the constructor to specify which user will be
+    //        displayed.
+    public void setUsername(String username) {
+    	this.username = username;
+    }
 
+    public VisitSummaryDisplay(char accessLevel){
+    	this.accessLevel = accessLevel;
+    }
+    
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("VisitSummaryDisplay");
+        primaryStage.setTitle("Visit Summary Display");
 
         // Create a VBox for white background with padding
         VBox whiteBackground = new VBox();
@@ -36,15 +68,12 @@ public class VisitSummaryDisplay extends LoginDisplay {
         firstBox.setMinSize(500, 360);
         firstBox.setPadding(new Insets(20));
 
-        emailField = new TextField();
-        passField = new TextField();
-        repPassField = new TextField();
-        firstNameField = new TextField();
-        lastNameField = new TextField();
-
         Font labelFont = Font.font("Times New Roman");
 
-        Label title = new Label("Visit Summaries - [Name]");
+        FileHandler fh = new FileHandler();
+        String fname = fh.getAttr(username, "First name");
+        String lname = fh.getAttr(username, "Last name");
+        Label title = new Label("Visit Summaries - " + fname + " " + lname);
         title.setFont(Font.font("Arial", 24));
         
         Label vitals = new Label("Patient Vitals");
@@ -55,7 +84,7 @@ public class VisitSummaryDisplay extends LoginDisplay {
         weightLabel.setFont(labelFont);
         Label lbs = new Label("lbs");
         lbs.setFont(Font.font("Arial", 18));
-        TextField weightField = new TextField();
+        weightField = new TextField();
         HBox weightFieldwLBS = new HBox(10);       
         weightFieldwLBS.getChildren().addAll(weightField, lbs);
         weightField.setPrefWidth(36);
@@ -68,8 +97,8 @@ public class VisitSummaryDisplay extends LoginDisplay {
         Label in = new Label("in.");
         ft.setFont(Font.font("Arial", 18));
         in.setFont(Font.font("Arial", 18));
-        TextField ftField = new TextField();
-        TextField inField = new TextField();
+        ftField = new TextField();
+        inField = new TextField();
         HBox heightFieldwFTIN = new HBox(10);       
         heightFieldwFTIN.getChildren().addAll(ftField, ft, inField, in);
         ftField.setPrefWidth(36);
@@ -82,7 +111,7 @@ public class VisitSummaryDisplay extends LoginDisplay {
         tempLabel.setFont(labelFont);
         Label degF = new Label("\u00B0F");
         degF.setFont(Font.font("Arial", 18));
-        TextField tempField = new TextField();
+        tempField = new TextField();
         HBox tempFieldwDegF = new HBox(10);       
         tempFieldwDegF.getChildren().addAll(tempField, degF);
         tempField.setPrefWidth(36);
@@ -95,8 +124,8 @@ public class VisitSummaryDisplay extends LoginDisplay {
         Label secondLabel = new Label("mmHg");
         firstLabel.setFont(Font.font("Arial", 18));
         secondLabel.setFont(Font.font("Arial", 18));
-        TextField firstField = new TextField();
-        TextField secondField = new TextField();
+        firstField = new TextField();
+        secondField = new TextField();
         Label overLabel = new Label("over");
         overLabel.setFont(Font.font("Arial", 18));
         HBox bpFieldWithLabels = new HBox(10);
@@ -109,7 +138,8 @@ public class VisitSummaryDisplay extends LoginDisplay {
         // Other Notes Field
         Label notesLabel = new Label("Other Notes");
         notesLabel.setFont(Font.font("Arial", 18));
-        TextField notesField = new TextField();
+        notesField = new TextArea();
+        notesField.setWrapText(true);
         HBox hnotesField = new HBox(10);
         hnotesField.getChildren().addAll(notesField);
         notesField.setPrefWidth(400);
@@ -134,39 +164,22 @@ public class VisitSummaryDisplay extends LoginDisplay {
         secondBox.setMinSize(500, 360);
         secondBox.setPadding(new Insets(20));
         
-        // Date field
-        Label dobLabel = new Label("Date:");
-        dobLabel.setFont(labelFont);
-        HBox dobFields = new HBox(10);
-        ComboBox<String> monthComboBox = new ComboBox<>();
-        monthComboBox.setPromptText("Month");
-        monthComboBox.getItems().addAll("January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December");
-        ComboBox<String> dayComboBox = new ComboBox<>();
-        dayComboBox.setPromptText("Day");
-        for (int i = 1; i <= 31; i++) {
-            dayComboBox.getItems().add(String.valueOf(i));
-        }
-        ComboBox<String> yearComboBox = new ComboBox<>();
-        yearComboBox.setPromptText("Year");
-        for (int year = 1900; year <= 2024; year++) {
-            yearComboBox.getItems().add(String.valueOf(year));
-        }
-        dobFields.getChildren().addAll(monthComboBox, dayComboBox, yearComboBox);
-        
         // Allergy Field
         Label allLabel = new Label("Allergies");
         allLabel.setFont(labelFont);
-        TextField allField = new TextField();
+        allField = new TextArea();
+        allField.setWrapText(true);
         HBox hallField = new HBox(10);
         hallField.getChildren().addAll(allField);
         allField.setPrefWidth(400);
         allField.setPrefHeight(60);
         
-        // Allergy Field
+        // Medication Field
         Label medLabel = new Label("Medications");
         medLabel.setFont(labelFont);
-        TextField medField = new TextField();
+        medField = new TextArea();
+        medField.setWrapText(true);
+        //medField.setWrapText(true);
         HBox hmedField = new HBox(10);
         hmedField.getChildren().addAll(medField);
         medField.setPrefWidth(400);
@@ -175,7 +188,9 @@ public class VisitSummaryDisplay extends LoginDisplay {
         // Immunization Field
         Label immLabel = new Label("Immunization History");
         immLabel.setFont(labelFont);
-        TextField immField = new TextField();
+        immField = new TextArea();
+        immField.setWrapText(true);
+        //immField.setWrapText(true);
         HBox himmField = new HBox(10);
         himmField.getChildren().addAll(immField);
         immField.setPrefWidth(400);
@@ -184,14 +199,15 @@ public class VisitSummaryDisplay extends LoginDisplay {
         // Health Field
         Label healLabel = new Label("Previous health concerns");
         healLabel.setFont(labelFont);
-        TextField healField = new TextField();
+        healField = new TextArea();
+        healField.setWrapText(true);
+        //healField.setWrapText(true);
         HBox hhealField = new HBox(10);
         hhealField.getChildren().addAll(healField);
         healField.setPrefWidth(400);
         healField.setPrefHeight(60);
         
         secondBox.getChildren().addAll(
-        		createLabeledField(dobLabel, dobFields), 
                 createLabeledField(allLabel, hallField),
                 createLabeledField(medLabel, hmedField),
                 createLabeledField(immLabel, himmField),
@@ -218,17 +234,92 @@ public class VisitSummaryDisplay extends LoginDisplay {
         buttons.setPrefSize(50, 50);
         buttons.setPadding(new Insets(0, 80, 30, 0));
         buttons.setAlignment(Pos.CENTER_RIGHT);
-        buttons.getChildren().addAll(
-        		home,
-        		save
-        		);
+        
         
         VBox finalScreen = new VBox(10);
         finalScreen.setStyle("-fx-background-color: #f0f0f0; -fx-border-color: black; -fx-border-width: 1px;");
+        
+        ///////////////////////////////////////////////////
+        
+        save.setOnAction(new EventHandler<>() {
+            public void handle(ActionEvent event) {
+                FileHandler fh = new FileHandler();
+                HashMap<String, String> data = new HashMap<String, String>();
+                data.put("Weight", weightField.getText());
+                data.put("Feet", ftField.getText());
+                data.put("Inches", inField.getText());
+                data.put("Temperature", tempField.getText());
+                data.put("Pressure1", firstField.getText());
+                data.put("Pressure2", secondField.getText());
+                data.put("Notes", notesField.getText());
+                data.put("Allergies", allField.getText());
+                data.put("Medications", medField.getText());
+                data.put("Immunizations", immField.getText());
+                data.put("Concerns", healField.getText());
+                fh.updateAttrs(username, data);
+            }
+        });
+        
+        home.setOnAction(new EventHandler<>() {
+            public void handle(ActionEvent event) {
+                if(accessLevel == 'p') { //patient details
+                	PatientDetailsDisplay display = new PatientDetailsDisplay();
+                	display.start(primaryStage);
+                }
+                if(accessLevel == 'd') { //doctor patient details
+                	DoctorDetailsDisplay display = new DoctorDetailsDisplay();
+                	display.start(primaryStage);
+                }
+                if(accessLevel == 'n') { //nurse home
+                	RetrievePatientDisplay display = new RetrievePatientDisplay();
+                	display.start(primaryStage);
+                }
+            }
+        });
+        
+        if(accessLevel == 'p'){
+        	setEditable(false);
+            
+            weightField.setText("180");
+            ftField.setText("5");
+            inField.setText("10");
+            tempField.setText("98");
+            firstField.setText("120");
+            secondField.setText("80");
+            notesField.setText("No notes.");
+            
+            allField.setText("No allergies.");
+            medField.setText("No medications.");
+            immField.setText("Fully vaccinated.");
+            healField.setText("No previous health risks.");
+            
+            buttons.getChildren().addAll(
+            		home
+            		);
+        }
+        else if(accessLevel == 'd'){ //doctor
+        	allField.setEditable(true);
+            medField.setEditable(true);
+            immField.setEditable(true);
+            healField.setEditable(true);
+        	buttons.getChildren().addAll(
+            		home,
+            		save
+            		);
+        }else { //nurse
+        	setEditable(true);
+        	buttons.getChildren().addAll(
+            		home,
+            		save
+            		);
+        }
+        
+        ///////////////////////////////////////////////////
+        
         finalScreen.getChildren().addAll(
-        		screen,
-        		buttons
-        		);
+	    		screen,
+	    		buttons
+	    		);
         
         // Add the gray boxes to the white background VBox
         whiteBackground.getChildren().addAll(finalScreen);
@@ -239,43 +330,33 @@ public class VisitSummaryDisplay extends LoginDisplay {
         primaryStage.setScene(scene);
         primaryStage.show();
         
-        ///////////////////////////////////////////////////
-        
-        save.setOnAction(new EventHandler<>() {
-            public void handle(ActionEvent event) {
-                // TODO
-            }
-        });
-        
-        home.setOnAction(new EventHandler<>() {
-            public void handle(ActionEvent event) {
-                // TODO
-            }
-        });
-        
-        weightField.setText("180");
-        ftField.setText("5");
-        inField.setText("10");
-        tempField.setText("98");
-        firstField.setText("120");
-        secondField.setText("80");
-        notesField.setText("No notes.");
-        
-        allField.setText("No allergies.");
-        medField.setText("No medications.");
-        immField.setText("Fully vaccinated.");
-        healField.setText("No previous health risks.");
-        
-        
         
     }
 
+    private void setEditable(boolean value){
+    	weightField.setEditable(value);
+        ftField.setEditable(value);
+        inField.setEditable(value);
+        tempField.setEditable(value);
+        firstField.setEditable(value);
+        secondField.setEditable(value);
+        notesField.setEditable(value);
+        
+        allField.setEditable(value);
+        medField.setEditable(value);
+        immField.setEditable(value);
+        healField.setEditable(value);
+    }
     // Helper method to create a labeled field
     private VBox createLabeledField(Label label, HBox textField) {
         VBox fieldBox = new VBox(5);
         fieldBox.getChildren().addAll(label, textField);
         textField.setPrefWidth(200);
         return fieldBox;
+    }
+    
+    public static void main(String[] args) {
+        launch(args);
     }
 
 }
