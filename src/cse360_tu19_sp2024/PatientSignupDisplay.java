@@ -28,9 +28,9 @@ import javafx.scene.layout.Pane;
 // Represents the Receptionist View
 public class PatientSignupDisplay extends LoginDisplay {
 	VBox pane;
-    TextField username, email, pass, passRepeat, firstName, lastName, address1, address2, postalCode;
+    TextField username, email, phone, pass, passRepeat, firstName, lastName, middleName, address1, address2, postalCode;
     
-    ComboBox state, dobDay, dobMonth, dobYear;
+    ComboBox sex, state, dobDay, dobMonth, dobYear;
 
     // Starts the PatientSignupDisplay View
     public void start(Stage primaryStage) {
@@ -42,12 +42,15 @@ public class PatientSignupDisplay extends LoginDisplay {
         
         Label title = new Label("Signup");
         Label usernameLabel = new Label("Username");
+        Label phoneLabel = new Label("Phone");
         Label emailLabel = new Label("Email");
         Label passLabel = new Label("Password");
         Label repeatPassLabel = new Label("Repeat Password");
         Label detailsSectionLabel = new Label("Personal Details");
         Label fnameLabel = new Label("First name");
         Label lnameLabel = new Label("Last name");
+        Label mnameLabel = new Label("Middle name (optional)");
+        Label sexLabel = new Label("Sex");
         Label dobLabel = new Label("Date of Birth");
         Label address1Label = new Label("Address line 1");
         Label address2Label = new Label("Address line 2");
@@ -56,12 +59,15 @@ public class PatientSignupDisplay extends LoginDisplay {
         
         title.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         usernameLabel.setFont(Font.font("Times New Roman"));
+        phoneLabel.setFont(Font.font("Times New Roman"));
         emailLabel.setFont(Font.font("Times New Roman"));
         passLabel.setFont(Font.font("Times New Roman"));
         repeatPassLabel.setFont(Font.font("Times New Roman"));
         detailsSectionLabel.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         fnameLabel.setFont(Font.font("Times New Roman"));
         lnameLabel.setFont(Font.font("Times New Roman"));
+        mnameLabel.setFont(Font.font("Times New Roman"));
+        sexLabel.setFont(Font.font("Times New Roman"));
         dobLabel.setFont(Font.font("Times New Roman"));
         address1Label.setFont(Font.font("Times New Roman"));
         address2Label.setFont(Font.font("Times New Roman"));
@@ -70,6 +76,8 @@ public class PatientSignupDisplay extends LoginDisplay {
         
         username = new TextField();
         username.setPromptText("Enter username...");
+        phone = new TextField();
+        phone.setPromptText("Enter phone number...");
         email = new TextField();
         email.setPromptText("Enter email...");
         pass = new TextField();
@@ -80,6 +88,10 @@ public class PatientSignupDisplay extends LoginDisplay {
         firstName.setPromptText("Enter first name...");
         lastName = new TextField();
         lastName.setPromptText("Enter last name...");
+        middleName = new TextField();
+        middleName.setPromptText("Enter middle name (optional)...");
+        sex = new ComboBox();
+        sex.getItems().addAll("Female", "Male", "Other");
         address1 = new TextField();
         address1.setPromptText("Enter address 1...");
         address2 = new TextField();
@@ -132,13 +144,13 @@ public class PatientSignupDisplay extends LoginDisplay {
             	
             // Check if username already exists
             } else {
-            	File dir = new File("files/users");
+            	File dir = new File("files/users/");
             	File[] files = dir.listFiles();
             	if(files==null) {
             		data.put("Username", username.getText());
             		return;
             	}
-            	File newFile = new File("files/users", username.getText() + ".txt");
+            	File newFile = new File("files/users/", username.getText() + ".txt");
             	if(newFile.exists()) {
 	            	Alert alert = new Alert(AlertType.ERROR);
 	            	alert.setHeaderText("Invalid input");
@@ -165,6 +177,20 @@ public class PatientSignupDisplay extends LoginDisplay {
             	alert.setContentText("Email is wrongly formatted");
             	alert.showAndWait();
             	return;
+            }
+            
+         // --- Check if phone is not empty -------------------------------------------------------
+            // If phone is empty or not set, display alert and interrupt function flow
+            if (phone.getText().equals("")) {
+            	Alert alert = new Alert(AlertType.ERROR);
+            	alert.setHeaderText("Invalid input");
+            	alert.setContentText("Please set phone number");
+            	alert.showAndWait();
+            	return;
+            
+            // If phone input is valid, add to'data'
+            } else {
+            	data.put("Phone number", phone.getText());
             }
         	
             // --- Check if password matches ------------------------------------------------------
@@ -214,6 +240,25 @@ public class PatientSignupDisplay extends LoginDisplay {
             // If last name input is valid, add to'data'
             } else {
             	data.put("Last name", lastName.getText());
+            }
+            
+            // If middle name is set, add to 'data'
+            if (!middleName.getText().equals("")) {
+            	data.put("Middle name", middleName.getText());
+            }
+            
+            // --- Check if sex combo boxes are set -----------------------------------------------
+            // If sex is not set, display alert and interrupt function flow
+            if (sex.getSelectionModel().isEmpty()) {
+            	Alert alert = new Alert(AlertType.ERROR);
+            	alert.setHeaderText("Invalid input");
+            	alert.setContentText("Sex is not set");
+            	alert.showAndWait();
+            	return;
+            	
+            // If DOB month input is valid, add to'data'
+            } else {
+            	data.put("Sex", sex.getValue().toString());
             }
         	
             // --- Check if DOB combo boxes are set -----------------------------------------------
@@ -271,7 +316,7 @@ public class PatientSignupDisplay extends LoginDisplay {
             }
             
             // If Address 2 is set, add to 'data'
-            if (address2.getText().equals("")) {
+            if (!address2.getText().equals("")) {
             	data.put("Address 2", address2.getText());
             }
         	
@@ -306,14 +351,24 @@ public class PatientSignupDisplay extends LoginDisplay {
             // Save to file
         	FileHandler fh = new FileHandler();
         	fh.save("files/users/" + username.getText() + ".txt", data);
+        	
+        	Alert alert = new Alert(AlertType.CONFIRMATION);
+        	alert.setHeaderText("Successfully logged in.");
+        	alert.setContentText("Press OK to view patient details.");
+        	alert.showAndWait();
+        	PatientDetailsDisplay patient = new PatientDetailsDisplay();
+        	System.out.println("Opening Patient Details!");
+        	patient.start(primaryStage);
         });
 
         username.setPrefWidth(250);
         email.setPrefWidth(250);
+        phone.setPrefWidth(250);
         pass.setPrefWidth(250);
         passRepeat.setPrefWidth(250);
         firstName.setPrefWidth(250);
         lastName.setPrefWidth(250);
+        middleName.setPrefWidth(250);
         address1.setPrefWidth(250);
         address2.setPrefWidth(250);
         postalCode.setPrefWidth(250);
@@ -342,6 +397,13 @@ public class PatientSignupDisplay extends LoginDisplay {
         HBox nameInputs = new HBox(10);
         nameInputs.getChildren().addAll(fname, lname);
         
+        VBox mname = new VBox(10);
+        mname.getChildren().addAll(mnameLabel, middleName);
+        VBox sexV = new VBox(10);
+        sexV.getChildren().addAll(sexLabel, sex);
+        HBox mnsex = new HBox(10);
+        mnsex.getChildren().addAll(mname, sexV);
+        
         HBox dob = new HBox(10);
         dob.getChildren().addAll(dobMonth, dobDay, dobYear);
         
@@ -352,12 +414,12 @@ public class PatientSignupDisplay extends LoginDisplay {
         HBox statePostalInputs = new HBox(10);
         statePostalInputs.getChildren().addAll(stateBox, postalBox);
         
-        pane.getChildren().addAll(title, usernameLabel, username, emailLabel, email, passwordInputs,
-        		detailsSectionLabel, nameInputs, dobLabel, dob, 
+        pane.getChildren().addAll(title, usernameLabel, username, emailLabel, email, phoneLabel, phone, passwordInputs,
+        		detailsSectionLabel, nameInputs, mnsex, dobLabel, dob, 
         		address1Label, address1, address2Label, address2,
         		statePostalInputs, consent, signUpButton, back);
        
-        Scene scene = new Scene(this.getPane(), 500, 650);
+        Scene scene = new Scene(this.getPane(), 500, 800);
       
         primaryStage.setScene(scene);
         primaryStage.show();
