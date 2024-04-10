@@ -59,4 +59,19 @@ public class FileHandler {
     	information.put(attr, value);
     	this.save(fileName, information);
     }
+    
+    // Update multiple attributes
+    public void updateAttrs(String fileName, HashMap<String, String> attr) {
+    	HashMap<String, String> information = this.parse(fileName);
+    	information.putAll(attr);
+    	this.save(fileName, information);
+    }
+    
+    
+    // Remove attribute
+    public void removeAttr(String fileName, String attr) {
+    	HashMap<String, String> information = this.parse(fileName);
+    	information.remove(attr);
+    	this.save(fileName, information);
+    }
 }
