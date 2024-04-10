@@ -46,19 +46,25 @@ public class StaffLoginDisplay extends LoginDisplay {
         	        "Username",
         	        "Password"
         	    };
+        try {
         	String[] fields = parse();
-        	PatientSignupForm form = new PatientSignupForm(fieldnames, fields, user.getText());
-            if (form.validateUserSignup()) {
-            	//go to patient view
-            	PatientDisplay patient = new PatientDisplay();
+        	StaffLoginForm form = new StaffLoginForm(fieldnames, fields, user.getText());
+            if (form.validateUserLogin()) {
+            	//TODO go to doctor or nurse view
+            	//PatientDisplay patient = new PatientDisplay();
             	System.out.println("Opening Patient Display!");
-            	patient.start(primaryStage);
+            	//patient.start(primaryStage);
             	
             } else {
             	//display some sort of error
             	System.out.println("Invalid username or password.");
             }
-        });
+        	
+        } catch(Exception exe) {
+        	//display some sort of error
+        	System.out.println("Error.");
+        };
+    });
 
         
         login.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");

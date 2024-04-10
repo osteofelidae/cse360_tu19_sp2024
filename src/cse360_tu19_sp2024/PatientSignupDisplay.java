@@ -124,18 +124,21 @@ public class PatientSignupDisplay extends LoginDisplay {
         	        "State",
         	        "Postal Code"
         	    };
-        	String[] fields = parse();
-        	PatientSignupForm form = new PatientSignupForm(fieldnames, fields);
-            if (form.validateUserSignup()) {
+        	
+            try {
+            	String[] fields = parse();
+            	PatientSignupForm form = new PatientSignupForm(fieldnames, fields, "temp");
+            	if(form.validateUserSignup()) {
             	//go to patient view
-            	PatientDisplay patient = new PatientDisplay();
+            	//PatientDisplay patient = new PatientDisplay();
             	System.out.println("Opening Patient Display!");
-            	patient.start(primaryStage);
+            	//patient.start(primaryStage);
+            	}
             	
-            } else {
+            } catch(Exception exe) {
             	//display some sort of error
             	System.out.println("Error.");
-            }
+            };
         });
 
         email.setPrefWidth(250);
