@@ -28,10 +28,10 @@ import javafx.scene.layout.Pane;
 public class PatientSignupDisplay extends LoginDisplay {
 	VBox pane;
     TextField email, pass, passRepeat, firstName, lastName, 
-    	middleName, address1, 
+    	address1, 
     	address2, postalCode;
     
-    ComboBox sexList, state, dobDay, dobMonth, dobYear;
+    ComboBox state, dobDay, dobMonth, dobYear;
 
     // Starts the PatientSignupDisplay View
     public void start(Stage primaryStage) {
@@ -48,8 +48,6 @@ public class PatientSignupDisplay extends LoginDisplay {
         Label detailsSectionLabel = new Label("Personal Details");
         Label fnameLabel = new Label("First name");
         Label lnameLabel = new Label("Last name");
-        Label mnameLabel = new Label("Middle name(s)");
-        Label sexLabel = new Label("Sex");
         Label dobLabel = new Label("Date of Birth");
         Label address1Label = new Label("Address line 1");
         Label address2Label = new Label("Address line 2");
@@ -63,26 +61,29 @@ public class PatientSignupDisplay extends LoginDisplay {
         detailsSectionLabel.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         fnameLabel.setFont(Font.font("Times New Roman"));
         lnameLabel.setFont(Font.font("Times New Roman"));
-        mnameLabel.setFont(Font.font("Times New Roman"));
-        sexLabel.setFont(Font.font("Times New Roman"));
         dobLabel.setFont(Font.font("Times New Roman"));
         address1Label.setFont(Font.font("Times New Roman"));
         address2Label.setFont(Font.font("Times New Roman"));
         stateLabel.setFont(Font.font("Times New Roman"));
         postalCodeLabel.setFont(Font.font("Times New Roman"));
         
-        email = new TextField("Enter email...");
-        pass = new TextField("Enter password...");
-        passRepeat = new TextField("Repeat password...");
-        firstName = new TextField("Enter first name...");
-        lastName = new TextField("Enter last name...");
-        middleName = new TextField("Enter middle name(s)");
-        address1 = new TextField("Enter address 1...");
-        address2 = new TextField("Enter address 2 (optional)...");
-        postalCode = new TextField("Enter postal code...");
+        email = new TextField();
+        email.setPromptText("Enter email...");
+        pass = new TextField();
+        pass.setPromptText("Enter password...");
+        passRepeat = new TextField();
+        passRepeat.setPromptText("Repeat password...");
+        firstName = new TextField();
+        firstName.setPromptText("Enter first name...");
+        lastName = new TextField();
+        lastName.setPromptText("Enter last name...");
+        address1 = new TextField();
+        address1.setPromptText("Enter address 1...");
+        address2 = new TextField();
+        address2.setPromptText("Enter address 2 (optional)...");
+        postalCode = new TextField();
+        postalCode.setPromptText("Enter postal code...");
         
-        sexList = new ComboBox();
-        sexList.getItems().addAll("Female", "Male","Other");
         dobMonth = new ComboBox();
         dobMonth.getItems().addAll("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
         dobDay = new ComboBox();
@@ -104,7 +105,6 @@ public class PatientSignupDisplay extends LoginDisplay {
         	    "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
         	);
         
-        sexList.setPromptText("Select...");
         dobMonth.setPromptText("Month");
         dobDay.setPromptText("Day");
         dobYear.setPromptText("Year");
@@ -281,7 +281,6 @@ public class PatientSignupDisplay extends LoginDisplay {
         passRepeat.setPrefWidth(250);
         firstName.setPrefWidth(250);
         lastName.setPrefWidth(250);
-        middleName.setPrefWidth(250);
         address1.setPrefWidth(250);
         address2.setPrefWidth(250);
         postalCode.setPrefWidth(250);
@@ -343,8 +342,6 @@ public class PatientSignupDisplay extends LoginDisplay {
     	        passRepeat.getText(),
     	        firstName.getText(),
     	        lastName.getText(),
-    	        middleName.getText(),
-    	        sexList.getSelectionModel().getSelectedItem().toString(),
     	        dobMonth.getValue() + " " + dobDay.getValue() + ", " + dobYear.getValue(),
     	        address1.getText(),
     	        address2.getText(),
