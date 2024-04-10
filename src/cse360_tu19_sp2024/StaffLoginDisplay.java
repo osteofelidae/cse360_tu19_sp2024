@@ -3,6 +3,7 @@ package cse360_tu19_sp2024;
 import javafx.scene.Scene;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.stage.Stage;
 import javafx.scene.layout.VBox;
@@ -29,8 +30,10 @@ public class StaffLoginDisplay extends LoginDisplay {
         pane = new VBox(10);
         pane.setPadding(new Insets(20));
 
-        userField = new TextField("Enter username...");
-        passField = new TextField("Enter password...");
+        userField = new TextField();
+        userField.setPromptText("Enter username...");
+        passField = new TextField();
+        passField.setPromptText("Enter password...");
 
         Label title = new Label("Staff Login");
         Label user = new Label("Username");
@@ -39,6 +42,10 @@ public class StaffLoginDisplay extends LoginDisplay {
         title.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         user.setFont(Font.font("Times New Roman"));
         pass.setFont(Font.font("Times New Roman"));
+        
+        ComboBox staffSelect = new ComboBox();
+        staffSelect.setPromptText("Select staff position");
+        staffSelect.getItems().addAll("Nurse", "Doctor");
 
         Button login = new Button("Login");
         login.setOnAction(e -> {
@@ -48,17 +55,22 @@ public class StaffLoginDisplay extends LoginDisplay {
         	    };
         try {
         	String[] fields = parse();
-        	StaffLoginForm form = new StaffLoginForm(fieldnames, fields, user.getText());
-            if (form.validateUserLogin()) {
-            	//TODO go to doctor or nurse view
-            	//PatientDisplay patient = new PatientDisplay();
-            	System.out.println("Opening Patient Display!");
-            	//patient.start(primaryStage);
+//        	StaffLoginForm form = new StaffLoginForm(fieldnames, fields, user.getText());
+//            if (form.validateUserLogin()) {
+        		if(staffSelect.getSelectionModel().getSelectedItem().toString().equals("Nurse")) {
+        			RetrievePatientDisplay nurse = new RetrievePatientDisplay();
+        			System.out.println("Opening Nurse Display!");
+        			nurse.start(primaryStage);
+        		} else {
+	            	DoctorDetailsDisplay doctor = new DoctorDetailsDisplay();
+	            	System.out.println("Opening Doctor Display!");
+	            	doctor.start(primaryStage);
+        		}
             	
-            } else {
-            	//display some sort of error
-            	System.out.println("Invalid username or password.");
-            }
+//            } else {
+//            	//display some sort of error
+//            	System.out.println("Invalid username or password.");
+//            }
         	
         } catch(Exception exe) {
         	//display some sort of error
@@ -89,7 +101,7 @@ public class StaffLoginDisplay extends LoginDisplay {
         VBox passLabelandInput = new VBox(10, pass, passField);
         inputBoxes.getChildren().addAll(userLabelandInput, passLabelandInput);
 
-        pane.getChildren().addAll(title, inputBoxes, login, message, back);
+        pane.getChildren().addAll(title, staffSelect, inputBoxes, login, message, back);
 
         Scene scene = new Scene(pane, 400, 250);
 

@@ -29,8 +29,10 @@ public class PatientLoginDisplay extends LoginDisplay {
         pane = new VBox(10);
         pane.setPadding(new Insets(20));
 
-        userField = new TextField("Enter username...");
-        passField = new TextField("Enter password...");
+        userField = new TextField();
+        userField.setPromptText("Enter username...");
+        passField = new TextField();
+        passField.setPromptText("Enter password...");
 
         Label title = new Label("Patient Login");
         Label user = new Label("Username");
@@ -48,17 +50,16 @@ public class PatientLoginDisplay extends LoginDisplay {
         	    };
         try {
         	String[] fields = parse();
-        	PatientLoginForm form = new PatientLoginForm(fieldnames, fields, user.getText());
-            if (form.validateUserLogin()) {
-            	//go to patient view
-            	//PatientDisplay patient = new PatientDisplay();
+//        	PatientLoginForm form = new PatientLoginForm(fieldnames, fields, user.getText());
+//            if (form.validateUserLogin()) {
+            	PatientDetailsDisplay patient = new PatientDetailsDisplay();
             	System.out.println("Opening Patient Display!");
-            	//patient.start(primaryStage);
+            	patient.start(primaryStage);
             	
-            } else {
-            	//display some sort of error
-            	System.out.println("Invalid username or password.");
-            }
+//            } else {
+//            	//display some sort of error
+//            	System.out.println("Invalid username or password.");
+//            }
         	
         } catch(Exception exe) {
         	//display some sort of error
