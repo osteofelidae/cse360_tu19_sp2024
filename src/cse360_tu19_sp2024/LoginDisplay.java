@@ -13,9 +13,11 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.layout.Pane; 
 
 // Hamada's control panel
 public class LoginDisplay extends Application {
+	VBox pane;
     
     public static void main(String[] args) {
         launch(args);
@@ -74,13 +76,19 @@ public class LoginDisplay extends Application {
         staff.setPrefWidth(200);
         staff.setPrefHeight(20);
         
-        VBox root = new VBox(10);
-        root.setPadding(new Insets(10));
-        root.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(label, intake, patient, staff);
+        pane = new VBox(10);
+        pane.setPadding(new Insets(10));
+        pane.setAlignment(Pos.CENTER);
+        pane.getChildren().addAll(label, intake, patient, staff);
         
-        Scene scene = new Scene(root, 400, 400);
+        Scene scene = new Scene(pane, 400, 400);
+        
         primaryStage.setScene(scene);
         primaryStage.show();
     }  
+    
+    public Pane getPane() {
+		return pane;
+	}
+    
 }
