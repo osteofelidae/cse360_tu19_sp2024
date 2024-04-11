@@ -53,7 +53,6 @@ public class VisitSummaryDisplay extends Application {
 
     public VisitSummaryDisplay(char accessLevel){
     	this.accessLevel = accessLevel;
-    	populateFields();
     }
     
     @Override
@@ -259,7 +258,7 @@ public class VisitSummaryDisplay extends Application {
                 data.put("Medications", medField.getText());
                 data.put("Immunizations", immField.getText());
                 data.put("Concerns", healField.getText());
-                fh.updateAttrs(username, data);
+                fh.updateAttrs("files/users/"+username+".txt", data);
             }
         });
         
@@ -409,10 +408,6 @@ public class VisitSummaryDisplay extends Application {
         primaryStage.show();
         
         
-    }
-    
-    public void populateFields() {
-    	
     }
 
     private void setEditable(boolean value){

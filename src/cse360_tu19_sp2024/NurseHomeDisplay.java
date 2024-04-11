@@ -201,7 +201,6 @@ public class NurseHomeDisplay extends Application {
                     	  alert.showAndWait();
                     	  found = true;
                     	  retrievedPatientID = data.get("Username");
-
                     	  break;
         				}
                    }
