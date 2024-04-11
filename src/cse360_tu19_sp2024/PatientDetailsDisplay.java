@@ -564,9 +564,10 @@ public class PatientDetailsDisplay extends Application {
         Hyperlink visitSummaries = new Hyperlink("Go to visit summaries >");
         visitSummaries.setOnAction(new EventHandler<>() {
             public void handle(ActionEvent event) {
-//            	VisitSummariesDisplay visit = new VisitSummariesDisplay();
+            	VisitSummaryDisplay visit = new VisitSummaryDisplay('p');
                 System.out.println("Opening Visit Summaries!");
-//              visit.start(primaryStage);
+                visit.setUsername(username);
+                visit.start(primaryStage);
             }
         });
         actions.getChildren().addAll(aTitle, messaging, aHeader, visitSummaries);
