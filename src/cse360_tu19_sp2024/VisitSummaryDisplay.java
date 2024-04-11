@@ -7,13 +7,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -73,8 +71,8 @@ public class VisitSummaryDisplay extends Application {
         Font labelFont = Font.font("Times New Roman");
 
         FileHandler fh = new FileHandler();
-        String fname = fh.getAttr("files/users/"+username+".txt", "First name");
-        String lname = fh.getAttr("files/users/"+username+".txt", "Last name");
+        String fname = fh.getAttr(username, "First name");
+        String lname = fh.getAttr(username, "Last name");
         Label title = new Label("Visit Summaries - " + fname + " " + lname);
         title.setFont(Font.font("Arial", 24));
         
@@ -258,7 +256,7 @@ public class VisitSummaryDisplay extends Application {
                 data.put("Medications", medField.getText());
                 data.put("Immunizations", immField.getText());
                 data.put("Concerns", healField.getText());
-                fh.updateAttrs("files/users/"+username+".txt", data);
+                fh.updateAttrs(username, data);
             }
         });
         
@@ -296,7 +294,7 @@ public class VisitSummaryDisplay extends Application {
             healField.setText("No previous health risks.");
             
             HashMap<String, String> data = fh.parse(username);
-            if(fh.getAttr("files/users/"+username+".txt", "Weight") != null) {
+            if(fh.getAttr(username, "Weight") != null) {
             	weightField.setText(data.get("Weight"));
                 ftField.setText(data.get("Feet"));
                 inField.setText(data.get("Inches"));
@@ -377,14 +375,6 @@ public class VisitSummaryDisplay extends Application {
             		);
         }else { //nurse
         	setEditable(true);
-        	if(Integer.valueOf(fh.getAttr("files/users/"+username+".txt", "DOB Year")) >= 2012) {
-        		setEditable(false);
-        		System.out.println("Patient too young!");
-                Alert alert = new Alert(AlertType.ERROR);
-            	alert.setHeaderText("Patient is under the age of 12.");
-            	alert.setContentText("No vitals entries may be entered.");
-              	alert.showAndWait();
-        	}
         	buttons.getChildren().addAll(
             		home,
             		save
