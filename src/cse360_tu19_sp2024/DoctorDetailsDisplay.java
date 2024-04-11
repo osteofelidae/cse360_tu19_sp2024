@@ -882,7 +882,7 @@ public class DoctorDetailsDisplay extends Application {
                 Hyperlink messaging = new Hyperlink("Go to messaging >");
                 messaging.setOnAction(new EventHandler<>() {
                     public void handle(ActionEvent event) {
-                    	MessagingDisplay messaging = new MessagingDisplay();
+                    	MessagingDisplay messaging = new MessagingDisplay("");
                         System.out.println("Opening Messaging!");
                         messaging.start(primaryStage);
                     }
