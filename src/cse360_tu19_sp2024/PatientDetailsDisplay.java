@@ -876,7 +876,8 @@ public class PatientDetailsDisplay extends Application {
         Hyperlink messaging = new Hyperlink("Go to messaging >");
         messaging.setOnAction(new EventHandler<>() {
             public void handle(ActionEvent event) {
-            	MessagingDisplay messaging = new MessagingDisplay(username);
+            	MessagingDisplay messaging = new MessagingDisplay("Patient");
+            	messaging.setUsername(username);
                 System.out.println("Opening Messaging!");
                 messaging.start(primaryStage);
             }
@@ -1238,6 +1239,8 @@ public class PatientDetailsDisplay extends Application {
         logout.setOnAction(new EventHandler<>() {
             public void handle(ActionEvent event) {
                 System.out.println("Logged out!");
+                LoginDisplay newlogin = new LoginDisplay();
+                newlogin.start(primaryStage);
             }
         });
         

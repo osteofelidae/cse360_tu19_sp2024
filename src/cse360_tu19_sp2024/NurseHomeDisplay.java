@@ -144,7 +144,7 @@ public class NurseHomeDisplay extends Application {
         goToMessagingLink.setOnAction(new EventHandler<>() {
             public void handle(ActionEvent event) {
                 System.out.println("Opening Messaging Link!");
-                MessagingDisplay mess = new MessagingDisplay("");
+                MessagingDisplay mess = new MessagingDisplay("Nurse");
                 mess.start(primaryStage);
             }
         });
@@ -201,8 +201,6 @@ public class NurseHomeDisplay extends Application {
                     	  alert.showAndWait();
                     	  found = true;
                     	  retrievedPatientID = data.get("Username");
-
-                    	  break;
         				}
                    }
                   if(!found) {
