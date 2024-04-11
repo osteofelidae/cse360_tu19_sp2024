@@ -1,20 +1,24 @@
 package cse360_tu19_sp2024;
 
 import javafx.scene.Scene;
-
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.scene.layout.VBox;
+
+import java.io.File;
+import java.util.HashMap;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import java.util.HashMap;
 import javafx.scene.layout.Pane; 
 
 // Represents the PatientLoginDisplay
@@ -30,8 +34,10 @@ public class PatientLoginDisplay extends LoginDisplay {
         pane = new VBox(10);
         pane.setPadding(new Insets(20));
 
-        userField = new TextField("Enter username...");
-        passField = new TextField("Enter password...");
+        userField = new TextField();
+        userField.setPromptText("Enter username...");
+        passField = new TextField();
+        passField.setPromptText("Enter password...");
 
         Label title = new Label("Patient Login");
         Label user = new Label("Username");
@@ -43,22 +49,32 @@ public class PatientLoginDisplay extends LoginDisplay {
 
         Button login = new Button("Login");
         login.setOnAction(e -> {
-        	String[] fieldnames = {
-        	        "Username",
-        	        "Password"
-        	    };
-        	String[] fields = parse();
-        	PatientSignupForm form = new PatientSignupForm(fieldnames, fields);
-            if (form.validateUserSignup()) {
-            	//go to patient view
-            	PatientDisplay patient = new PatientDisplay();
-            	System.out.println("Opening Patient Display!");
-            	patient.start(primaryStage);
-            	
-            } else {
-            	//display some sort of error
-            	System.out.println("Invalid username or password.");
-            }
+        	if(userField.getText().equals("")) {
+        		Alert alert = new Alert(AlertType.ERROR);
+            	alert.setHeaderText("Invalid input");
+            	alert.setContentText("Please enter a username");
+            	alert.showAndWait();
+        	} else if(passField.getText().equals("")) {
+        		Alert alert = new Alert(AlertType.ERROR);
+            	alert.setHeaderText("Invalid input");
+            	alert.setContentText("Please enter a password");
+            	alert.showAndWait();
+        	} else {
+        		String accountType = validateUser(userField.getText(), passField.getText());
+        		if(accountType.equals("Patient")) {
+	            	PatientDetailsDisplay patient = new PatientDetailsDisplay();
+	            	System.out.println("Opening Patient Display!");
+	            	patient.setUsername(userField.getText());
+	            	patient.start(primaryStage);
+	        	} else if(!accountType.equals("")) {
+	        		Alert alert = new Alert(AlertType.ERROR);
+    	        	alert.setHeaderText("Incorrect account type");
+    	        	alert.setContentText("Please return to the main login display and select the correct login screen for your account type");
+    	        	alert.showAndWait();
+	        	} else {
+	        		System.out.println("Error exit");
+	        	}
+        	}
         });
 
         
@@ -69,40 +85,20 @@ public class PatientLoginDisplay extends LoginDisplay {
         Hyperlink newPatient = new Hyperlink("New patient? Take me to sign up >");
         Hyperlink back = new Hyperlink("Back to login selection");
         
-        login.setOnAction(event -> {
-            // Open another display
-            System.out.println("validating login");
-            
-            String[] userpass = {"username", "password"};
-            String[] immediates = {userField.getText(), passField.getText()};
-            
-            PatientLoginForm newform = new PatientLoginForm(userField.getText(), userpass, immediates, userField.getText());
-            if (newform.validateUserLogin()) {
-            	//go to patient view
-            	System.out.println("success, now lets go to patient view");
-            	
-            } else {
-            	//display some sort of error
-            	System.out.println("Incorrect username or password");
+        newPatient.setOnAction(new EventHandler<>() {
+            public void handle(ActionEvent event) {
+                System.out.println("Opening Patient Signup Display!");
+                PatientSignupDisplay patientSignup = new PatientSignupDisplay();
+                patientSignup.start(primaryStage);
             }
-                        
         });
         
-        
-        
-        
-        newPatient.setOnAction(event -> {
-            // Open another display
-            System.out.println("Switching to patient sign up");
-            PatientSignupDisplay newsignup = new PatientSignupDisplay();
-            newsignup.start(primaryStage);
-        });
-        
-        back.setOnAction(event -> {
-            // Open another display
-            System.out.println("Back to main select");
-            LoginDisplay newmain = new LoginDisplay();
-            newmain.start(primaryStage);
+        back.setOnAction(new EventHandler<>() {
+            public void handle(ActionEvent event) {
+                System.out.println("Opening Login Display!");
+                LoginDisplay loginDisplay = new LoginDisplay();
+                loginDisplay.start(primaryStage);
+            }
         });
         
         HBox inputBoxes = new HBox(10);
@@ -115,6 +111,37 @@ public class PatientLoginDisplay extends LoginDisplay {
         Scene scene = new Scene(pane, 400, 250);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+    
+    public String validateUser(String username, String password) {
+    	File dir = new File("files/users/");
+    	File[] files = dir.listFiles();
+    	if(files==null) {
+    		Alert alert = new Alert(AlertType.ERROR);
+        	alert.setHeaderText("Incorrect username or password.");
+        	alert.setContentText("Please try again");
+        	alert.showAndWait();
+    		return "";
+    	}
+    	File newFile = new File("files/users/", username + ".txt");
+    	if(!newFile.exists()) {
+    		Alert alert = new Alert(AlertType.ERROR);
+        	alert.setHeaderText("Incorrect username or password.");
+        	alert.setContentText("Please try again");
+        	alert.showAndWait();
+    		return "";
+    	}
+    	FileHandler fh = new FileHandler();
+    	HashMap<String, String> data = fh.parse("files/users/" + username + ".txt");
+    	if(password.equals(data.get("Password"))) {
+    		return data.get("Account type");
+    	} else {
+    		Alert alert = new Alert(AlertType.ERROR);
+        	alert.setHeaderText("Incorrect username or password.");
+        	alert.setContentText("Please try again");
+        	alert.showAndWait();
+    		return "";
+    	}
     }
     
     public Pane getPane() {

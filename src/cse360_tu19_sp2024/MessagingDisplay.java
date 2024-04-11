@@ -98,7 +98,6 @@ public class MessagingDisplay extends Application {
 
         VBox.setMargin(stackPane, new Insets(10));
         VBox.setMargin(messageInputBox, new Insets(10, 10, 10, 10));
-
         Scene scene = new Scene(root, 600, 400);
         primaryStage.setTitle("Messaging Display");
         primaryStage.setScene(scene);
@@ -208,7 +207,6 @@ public class MessagingDisplay extends Application {
             chatArea.appendText(chatHistory.get(selectedUser).toString());
         }
     }
-
     private void sendPatientMessage() {
         String selectedUser = userList.getSelectionModel().getSelectedItem();
         String message = messageField.getText().trim();
@@ -251,4 +249,3 @@ public class MessagingDisplay extends Application {
         launch(args);
     }
 }
-

@@ -1,0 +1,15 @@
+Email: johndoe@example.com
+DOB Month: January
+Sex: Male
+Account type: Patient
+Last name: Doe
+Postal code: 12345
+DOB Year: 2000
+Username: johndoe
+State: New Mexico
+Address 1: 308 Negra Arroyo Lane
+Phone number: 1234567890
+First name: John
+DOB Day: 1
+Middle name: Mark
+Password: 1234
