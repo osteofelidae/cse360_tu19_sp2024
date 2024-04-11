@@ -66,18 +66,35 @@ public class StaffLoginDisplay extends LoginDisplay {
             	alert.setHeaderText("Invalid input");
             	alert.setContentText("Please enter a password");
             	alert.showAndWait();
-        	} else if(validateUser(userField.getText(), passField.getText())) {
-        		if(staffSelect.getSelectionModel().getSelectedItem().toString().equals("Nurse")) {
-        			NurseHomeDisplay nurse = new NurseHomeDisplay();
-                	System.out.println("Opening Nurse Display!");
-                	nurse.start(primaryStage);
-        		} else {
-        			DoctorDetailsDisplay doctor = new DoctorDetailsDisplay();
-                	System.out.println("Opening Doctor Display!");
-                	doctor.start(primaryStage);
-        		}
         	} else {
-        		System.out.println("Error exit");
+        		String accountType = validateUser(userField.getText(), passField.getText());
+        		if(!accountType.equals("")) {
+	        		if(staffSelect.getSelectionModel().getSelectedItem().toString().equals("Nurse")) {
+	        			if(accountType.equals("Nurse")) {
+		        			NurseHomeDisplay nurse = new NurseHomeDisplay();
+		                	System.out.println("Opening Nurse Display!");
+		                	nurse.start(primaryStage);
+	        			} else {
+	        				Alert alert = new Alert(AlertType.ERROR);
+	        	        	alert.setHeaderText("Incorrect account type");
+	        	        	alert.setContentText("Please select the correct account type you are logging into. If you are a patient, please return to the main login display and select Returning Patient");
+	        	        	alert.showAndWait();
+	        			}
+	        		} else {
+	        			if(accountType.equals("Doctor")) {
+		        			DoctorDetailsDisplay doctor = new DoctorDetailsDisplay();
+		                	System.out.println("Opening Doctor Display!");
+		                	doctor.start(primaryStage);
+	        			} else {
+	        				Alert alert = new Alert(AlertType.ERROR);
+	        	        	alert.setHeaderText("Incorrect account type");
+	        	        	alert.setContentText("Please select the correct account type you are logging into. If you are a patient, please return to the main login display and select Returning Patient");
+	        	        	alert.showAndWait();
+	        			}
+	        		}
+	        	} else {
+	        		System.out.println("Error exit");
+	        	}
         	}
         });
 
@@ -111,7 +128,7 @@ public class StaffLoginDisplay extends LoginDisplay {
         primaryStage.show();
     }
     
-    public boolean validateUser(String username, String password) {
+    public String validateUser(String username, String password) {
     	File dir = new File("files/users/");
     	File[] files = dir.listFiles();
     	if(files==null) {
@@ -119,7 +136,7 @@ public class StaffLoginDisplay extends LoginDisplay {
         	alert.setHeaderText("Incorrect username or password.");
         	alert.setContentText("Please try again");
         	alert.showAndWait();
-    		return false;
+    		return "";
     	}
     	File newFile = new File("files/users/", username + ".txt");
     	if(!newFile.exists()) {
@@ -127,18 +144,18 @@ public class StaffLoginDisplay extends LoginDisplay {
         	alert.setHeaderText("Incorrect username or password.");
         	alert.setContentText("Please try again");
         	alert.showAndWait();
-    		return false;
+    		return "";
     	}
     	FileHandler fh = new FileHandler();
     	HashMap<String, String> data = fh.parse("files/users/" + username + ".txt");
     	if(password.equals(data.get("Password"))) {
-    		return true;
+    		return data.get("Account type");
     	} else {
     		Alert alert = new Alert(AlertType.ERROR);
         	alert.setHeaderText("Incorrect username or password.");
         	alert.setContentText("Please try again");
         	alert.showAndWait();
-    		return false;
+    		return "";
     	}
     }
     
