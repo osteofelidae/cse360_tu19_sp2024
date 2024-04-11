@@ -9,6 +9,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -204,8 +205,27 @@ public class MessagingDisplay extends Application {
 
     private void updateChat(String selectedUser) {
         chatArea.clear();
-        if (selectedUser != null && chatHistory.containsKey(selectedUser)) {
-            chatArea.appendText(chatHistory.get(selectedUser).toString());
+        if (selectedUser != null) {
+            //chatArea.appendText(chatHistory.get(selectedUser).toString());
+            FileHandler fh = new FileHandler();
+            ArrayList<String> data = fh.read("files/allMessages.txt");
+            
+            for (int i = 0; i < data.size()-2; i++) {
+            	String line = data.get(i);
+            	String line2 = data.get(i+1);
+            	String line3 = data.get(i+2);
+            	//System.out.println(line + ":::"+ line2 + ":::" + line3 + ":::");
+            	if ((line.equals("To: Office") && line2.equals("From: "+selectedUser)) || (line.equals("To: "+selectedUser) && line2.equals("From: Office"))) {
+            		// Display it
+            		//System.out.println("YES");
+            		String[] lineParts = line2.split(": ");
+            		String from = lineParts[1];
+            		String[] parts = line3.split(": ");
+            		String message = parts[1];
+            		chatArea.appendText(from + ": " + message + "\n");
+            	}
+            }
+            //chatArea.appendText(selectedUser);
         }
     }
     private void sendPatientMessage() {
