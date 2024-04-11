@@ -46,6 +46,7 @@ public class MessagingDisplay extends Application {
 
     private void handlePatientMessaging(Stage primaryStage) {
         // Create the user list with "Office" as the only option
+    	System.out.println("here man");
         userList = new ListView<>(FXCollections.observableArrayList("Office"));
         userList.setStyle("-fx-background-color: transparent; -fx-border-color: black;");
 
@@ -182,7 +183,7 @@ public class MessagingDisplay extends Application {
         if (directory.exists() && directory.isDirectory()) {
             for (File file : directory.listFiles()) {
                 if (file.isFile() && file.getName().endsWith(".txt")) {
-                    String username = file.getName().replace(".txt", "");
+                    String user_name = file.getName().replace(".txt", "");
                     Map<String, String> info = new HashMap<>();
                     try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                         String line;
@@ -195,7 +196,7 @@ public class MessagingDisplay extends Application {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    userlist.getItems().add(username);
+                    userlist.getItems().add(user_name);
                 }
             }
         }
