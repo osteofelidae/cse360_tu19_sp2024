@@ -23,6 +23,8 @@ import java.io.File;
 
 public class NurseHomeDisplay extends Application {
 	TextField firstNameField, lastNameField;
+	boolean found = false;
+	String retrievedPatientID = "";
 
     @Override
     public void start(Stage primaryStage) {
@@ -142,18 +144,25 @@ public class NurseHomeDisplay extends Application {
         goToMessagingLink.setOnAction(new EventHandler<>() {
             public void handle(ActionEvent event) {
                 System.out.println("Opening Messaging Link!");
-
-                MessagingDisplay mess = new MessagingDisplay("Nurse");
+                MessagingDisplay mess = new MessagingDisplay();
                 mess.start(primaryStage);
             }
         });
         
         enterVisitSummaryLink.setOnAction(new EventHandler<>() {
             public void handle(ActionEvent event) {
-            	VisitSummaryDisplay visit = new VisitSummaryDisplay('n');
-                System.out.println("Opening Visit Summaries!");
-                visit.setUsername("johndoe");  // TODO temp for testing
-                visit.start(primaryStage);
+            	if(found == true) {
+	            	VisitSummaryDisplay visit = new VisitSummaryDisplay('n');
+	                System.out.println("Opening Visit Summaries!");
+	                visit.setUsername(retrievedPatientID);
+	                visit.start(primaryStage);
+            	}else {
+            		System.out.println("No retrieval.");
+	                Alert alert = new Alert(AlertType.ERROR);
+	            	alert.setHeaderText("No patient retrieved.");
+	            	alert.setContentText("Retrieve a patient and try again.");
+	              	alert.showAndWait();
+            	}
             }
         });
         
@@ -172,12 +181,9 @@ public class NurseHomeDisplay extends Application {
                 
                 File dir = new File("files/users/");
                 File[] directoryListing = dir.listFiles();
-                System.out.println("check1");
-                boolean found = false;
+                found = false;
                 if (directoryListing != null) {
-                	System.out.println("check2");
                   for (File child : directoryListing) {
-                	  System.out.println("check3" + child.getName());
                 	  HashMap<String, String> data = fh.parse("files/users/"+child.getName());
                       String fname = data.get("First name");
                       String lname = data.get("Last name");
@@ -194,7 +200,6 @@ public class NurseHomeDisplay extends Application {
                     	  alert.setContentText("You can now enter their visit summary.");
                     	  alert.showAndWait();
                     	  found = true;
-
                     	  retrievedPatientID = data.get("Username");
         				}
                    }
