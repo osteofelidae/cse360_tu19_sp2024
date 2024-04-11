@@ -139,7 +139,6 @@ public class PatientDetailsDisplay extends Application {
             public void handle(ActionEvent event) {        	
             	// HashMaps for data
             	HashMap<String, String> toUpdate = new HashMap<String, String>();
-            	HashMap<String, String> toRemove = new HashMap<String, String>();
             	
             	// If username is not set, show an error
             	if (adUsernameField.getText().equals("")) {
@@ -408,19 +407,153 @@ public class PatientDetailsDisplay extends Application {
         pdUpdate.setText("Update");
         pdUpdate.setOnAction(new EventHandler<>() {
             public void handle(ActionEvent event) {
+            	// HashMaps for data
+            	HashMap<String, String> toUpdate = new HashMap<String, String>();
+            	
+            	// If first name is not set, show an error
+            	if (pdFirstNameField.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("First name is not set");
+                	alert.showAndWait();
+                	return;
+                
+                // If first name is valid, add to 'toUpdate'
+            	} else {
+            		toUpdate.put("First name", pdFirstNameField.getText());
+            	}
+            	
+            	// If last name is not set, show an error
+            	if (pdLastNameField.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Last name is not set");
+                	alert.showAndWait();
+                	return;
+                
+                // If last name is valid, add to 'toUpdate'
+            	} else {
+            		toUpdate.put("Last name", pdLastNameField.getText());
+            	}
+            	
+            	// If middle name is not set, remove it
+            	if (pdMiddleNameField.getText().equals("")) {
+            		fh.removeAttr(fileName, "Middle name");
+                
+                // If first name is valid, add to 'toUpdate'
+            	} else {
+            		toUpdate.put("First name", pdFirstNameField.getText());
+            	}
+            	
+            	// If sex is not set, display alert and interrupt function flow
+                if (pdSexList.getSelectionModel().isEmpty()) {
+                	Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Sex is not set");
+                	alert.showAndWait();
+                	return;
+                	
+                // If sex input is valid, add to'data'
+                } else {
+                	toUpdate.put("Sex", pdSexList.getValue().toString());
+                }
+                
+                // If month is not set, display alert and interrupt function flow
+                if (pdDateOfBirthList.getSelectionModel().isEmpty()) {
+                	Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("DOB Month is not set");
+                	alert.showAndWait();
+                	return;
+                	
+                // If month input is valid, add to'data'
+                } else {
+                	toUpdate.put("DOB Month", pdDateOfBirthList.getValue().toString());
+                }
+                
+                // If day is not set, display alert and interrupt function flow
+                if (pdDayList.getSelectionModel().isEmpty()) {
+                	Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("DOB Day is not set");
+                	alert.showAndWait();
+                	return;
+                	
+                // If day input is valid, add to'data'
+                } else {
+                	toUpdate.put("DOB Day", pdDayList.getValue().toString());
+                }
+                
+                // If year is not set, display alert and interrupt function flow
+                if (pdYearList.getSelectionModel().isEmpty()) {
+                	Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("DOB Year is not set");
+                	alert.showAndWait();
+                	return;
+                	
+                // If year input is valid, add to'data'
+                } else {
+                	toUpdate.put("DOB Year", pdYearList.getValue().toString());
+                }
+                
+                // If address line 1 is not set, show an error
+            	if (pdAddressLine1Field.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Address line 1 is not set");
+                	alert.showAndWait();
+                	return;
+                
+                // If address line 1 is valid, add to 'toUpdate'
+            	} else {
+            		toUpdate.put("Address 1", pdAddressLine1Field.getText());
+            	}
+            	
+            	// If address line 2 is not set, remove it
+            	if (pdAddressLine2Field.getText().equals("")) {
+            		fh.removeAttr(fileName, "Address 2");
+                
+                // If first name is valid, add to 'toUpdate'
+            	} else {
+            		toUpdate.put("Address 2", pdAddressLine2Field.getText());
+            	}
+            	
+            	// If state is not set, display alert and interrupt function flow
+                if (pdStateList.getSelectionModel().isEmpty()) {
+                	Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("State is not set");
+                	alert.showAndWait();
+                	return;
+                	
+                // If state input is valid, add to'data'
+                } else {
+                	toUpdate.put("State", pdStateList.getValue().toString());
+                }
+                
+                // If postal code is not set, show an error
+            	if (pdPostalCodeField.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Postal code is not set");
+                	alert.showAndWait();
+                	return;
+                
+                // If address line 1 is valid, add to 'toUpdate'
+            	} else {
+            		toUpdate.put("Postal code", pdPostalCodeField.getText());
+            	}
+            	
+            	fh.updateAttrs(fileName, toUpdate);
+            	
                 System.out.println("Updated!");
             }
         });
         
-        // TODO DIEGO ADD INPUT VALIDATION AND UPDATING THE FILE
-        
         personalDetails.getChildren().addAll(pdTitle, pdHbox1, pdHbox2, pdDateOfBirth, pdHbox3, pdAddressLine1, pdAddressLine1Field, pdAddressLine2, pdAddressLine2Field, pdHbox4, pdDataRetain, pdUpdate);
         
-        
-        
-        /*
-		 *	Insurance
-		*/
+        // --- Insurance --------------------------------------------------------------------------
         VBox insurance = new VBox(10);
         insurance.setStyle("-fx-border-color: gray; -fx-border-width: 2px;");
         insurance.setPadding(new Insets(10)); 
@@ -428,6 +561,7 @@ public class PatientDetailsDisplay extends Application {
         Label iTitle = new Label("Insurance");
         iTitle.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         
+        // --- Insurance provider -----------------------------------------------------------------
         Label iInsuranceProvider = new Label("Insurance provider");
         iInsuranceProvider.setFont(Font.font("Arial", 12));
         
@@ -435,6 +569,13 @@ public class PatientDetailsDisplay extends Application {
         iInsuranceProviderField.setMinWidth(100);
         iInsuranceProviderField.setPromptText("Enter insurance provider...");
         
+        // If existing insurance provider exists, display it
+        field = data.get("Insurance provider");
+        if (field != null) {
+        	iInsuranceProviderField.setText(field);
+        }
+        
+        // --- Policy number ----------------------------------------------------------------------
         Label iPolicyNumber = new Label("Policy number");
         iPolicyNumber.setFont(Font.font("Arial", 12));
         
@@ -442,11 +583,19 @@ public class PatientDetailsDisplay extends Application {
         iPolicyNumberField.setMinWidth(100);
         iPolicyNumberField.setPromptText("Enter policy number...");
         
+        // If existing policy number exists, display it
+        field = data.get("Policy number");
+        if (field != null) {
+        	iPolicyNumberField.setText(field);
+        }
+
+        // --- Subscriber details -----------------------------------------------------------------
         Label iHeader = new Label("Subscriber details");
         iHeader.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         
         HBox iHbox1 = new HBox(10);
         
+        // --- Subscriber first name --------------------------------------------------------------
         VBox iFirstNameVbox = new VBox(10);
         Label iFirstName = new Label("First name");
         iFirstName.setFont(Font.font("Arial", 12));
@@ -455,6 +604,13 @@ public class PatientDetailsDisplay extends Application {
         iFirstNameField.setPromptText("Enter first name...");
         iFirstNameVbox.getChildren().addAll(iFirstName, iFirstNameField);
         
+        // If existing subscriber first name exists, display it
+        field = data.get("Subscriber first name");
+        if (field != null) {
+        	iFirstNameField.setText(field);
+        }
+        
+        // --- Subscriber last name ---------------------------------------------------------------
         VBox iLastNameVbox = new VBox(10);
         Label iLastName = new Label("Last name");
         iLastName.setFont(Font.font("Arial", 12));
@@ -463,29 +619,58 @@ public class PatientDetailsDisplay extends Application {
         iLastNameField.setPromptText("Enter last name...");
         iLastNameVbox.getChildren().addAll(iLastName, iLastNameField);
         
+        // If existing subscriber last name exists, display it
+        field = data.get("Subscriber last name");
+        if (field != null) {
+        	iLastNameField.setText(field);
+        }
+        
         iHbox1.getChildren().addAll(iFirstNameVbox, iLastNameVbox);
         
+        // --- Date of birth ----------------------------------------------------------------------
         Label iDateOfBirth = new Label("Date of Birth");
         iDateOfBirth.setFont(Font.font("Arial", 12));
         
         HBox iHbox2 = new HBox(10);
         
+        // --- Insurance DOB month ----------------------------------------------------------------
         ComboBox iDateOfBirthList = new ComboBox();
         iDateOfBirthList.setPromptText("Month");
         iDateOfBirthList.getItems().addAll("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
         
+        // If existing insurance DOB month exists, display it
+        field = data.get("Insurance DOB month");
+        if (field != null) {
+        	iDateOfBirthList.getSelectionModel().select(field);
+        }
+        
+        // --- Insurance DOB day ------------------------------------------------------------------
         ComboBox iDayList = new ComboBox();
         iDayList.setPromptText("Day");
         iDayList.getItems().addAll("1", "2","3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31");
         
+        // If existing insurance DOB day exists, display it
+        field = data.get("Insurance DOB day");
+        if (field != null) {
+        	iDayList.getSelectionModel().select(field);
+        }
+        
+        // --- Insurance DOB year
         ComboBox iYearList = new ComboBox();
         iYearList.setPromptText("Year");
         for (int i = 1900; i <= 2022; i++) {
         	iYearList.getItems().add(i);
         }
         
+        // If existing insurance DOB year exists, display it
+        field = data.get("Insurance DOB year");
+        if (field != null) {
+        	iYearList.getSelectionModel().select(field);
+        }
+        
         iHbox2.getChildren().addAll(iDateOfBirthList, iDayList, iYearList);
         
+        // --- Insurance relationship -------------------------------------------------------------
         Label iRelationship = new Label("Relationship to patient");
         iRelationship.setFont(Font.font("Arial", 12));
         
@@ -493,6 +678,13 @@ public class PatientDetailsDisplay extends Application {
         iRelationshipField.setMinWidth(300);
         iRelationshipField.setPromptText("Enter relationship to parent...");
         
+        // If existing insurance relationship exists, display it
+        field = data.get("Insurance relationship");
+        if (field != null) {
+        	iRelationshipField.setText(field);
+        }
+        
+        // --- Update button ----------------------------------------------------------------------
         Button iUpdate = new Button();
         iUpdate.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
         iUpdate.setPrefWidth(100);
@@ -500,13 +692,127 @@ public class PatientDetailsDisplay extends Application {
         iUpdate.setText("Update");
         iUpdate.setOnAction(new EventHandler<>() {
             public void handle(ActionEvent event) {
+            	
+            	// HashMaps for data
+            	HashMap<String, String> toUpdate = new HashMap<String, String>();
+            	
+            	// If insurance provider is not set, show an error
+            	if (iInsuranceProviderField.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Insurance provider is not set");
+                	alert.showAndWait();
+                	return;
+                
+                // If insurance provider is valid, add to 'toUpdate'
+            	} else {
+            		
+            		toUpdate.put("Insurance provider", iInsuranceProviderField.getText());
+            	}
+            	
+            	// If policy number is not set, show an error
+            	if (iPolicyNumberField.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Policy number is not set");
+                	alert.showAndWait();
+                	return;
+                
+                // If policy number is valid, add to 'toUpdate'
+            	} else {
+            		
+            		toUpdate.put("Policy number", iPolicyNumberField.getText());
+            	}
+            	
+            	// If subscriber first name is not set, show an error
+            	if (iFirstNameField.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("First name is not set");
+                	alert.showAndWait();
+                	return;
+                
+                // If subscriber first name is valid, add to 'toUpdate'
+            	} else {
+            		
+            		toUpdate.put("Subscriber first name", iFirstNameField.getText());
+            	}
+            	
+            	// If subscriber first name is not set, show an error
+            	if (iLastNameField.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Last name is not set");
+                	alert.showAndWait();
+                	return;
+                
+                // If subscriber first name is valid, add to 'toUpdate'
+            	} else {
+            		
+            		toUpdate.put("Subscriber last name", iLastNameField.getText());
+            	}
+            	
+            	// If insurance DOB month is not set, display alert and interrupt function flow
+                if (iDateOfBirthList.getSelectionModel().isEmpty()) {
+                	Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Insurance DOB month is not set");
+                	alert.showAndWait();
+                	return;
+                	
+                // If sex input is valid, add to'data'
+                } else {
+                	toUpdate.put("Insurance DOB month", iDateOfBirthList.getValue().toString());
+                }
+                
+                // If insurance DOB day is not set, display alert and interrupt function flow
+                if (iDayList.getSelectionModel().isEmpty()) {
+                	Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Insurance DOB day is not set");
+                	alert.showAndWait();
+                	return;
+                	
+                // If insurance DOB day input is valid, add to'data'
+                } else {
+                	toUpdate.put("Insurance DOB day", iDayList.getValue().toString());
+                }
+                
+                // If insurance DOB year is not set, display alert and interrupt function flow
+                if (iYearList.getSelectionModel().isEmpty()) {
+                	Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Insurance DOB year is not set");
+                	alert.showAndWait();
+                	return;
+                	
+                // If insurance DOB day input is valid, add to'data'
+                } else {
+                	toUpdate.put("Insurance DOB year", iYearList.getValue().toString());
+                }
+                
+                // If subscriber first name is not set, show an error
+            	if (iRelationshipField.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Insurance relationship is not set");
+                	alert.showAndWait();
+                	return;
+                
+                // If subscriber first name is valid, add to 'toUpdate'
+            	} else {
+            		
+            		toUpdate.put("Insurance relationship", iRelationshipField.getText());
+            	}
+            	
+            	fh.updateAttrs(fileName, toUpdate);
                 System.out.println("Updated!");
             }
         });
         insurance.getChildren().addAll(iTitle, iInsuranceProvider, iInsuranceProviderField, iPolicyNumber, iPolicyNumberField, iHeader, iHbox1, iDateOfBirth, iHbox2, iRelationship, iRelationshipField, iUpdate);
         
         
-        
+        // TODO DIEGO START HERE
         /*
 		 *	Medicare/Medicaid
 		*/
@@ -539,9 +845,8 @@ public class PatientDetailsDisplay extends Application {
         
         
         
-        /*
-		 *	Actions
-		*/
+        
+        
         VBox actions = new VBox(10);
         actions.setStyle("-fx-border-color: gray; -fx-border-width: 2px;");
         actions.setPadding(new Insets(10));
