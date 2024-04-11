@@ -144,7 +144,7 @@ public class NurseHomeDisplay extends Application {
         goToMessagingLink.setOnAction(new EventHandler<>() {
             public void handle(ActionEvent event) {
                 System.out.println("Opening Messaging Link!");
-                MessagingDisplay mess = new MessagingDisplay();
+                MessagingDisplay mess = new MessagingDisplay("");
                 mess.start(primaryStage);
             }
         });
