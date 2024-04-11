@@ -71,8 +71,8 @@ public class VisitSummaryDisplay extends Application {
         Font labelFont = Font.font("Times New Roman");
 
         FileHandler fh = new FileHandler();
-        String fname = fh.getAttr(username, "First name");
-        String lname = fh.getAttr(username, "Last name");
+        String fname = fh.getAttr("files/users/"+username+".txt", "First name");
+        String lname = fh.getAttr("files/users/"+username+".txt", "Last name");
         Label title = new Label("Visit Summaries - " + fname + " " + lname);
         title.setFont(Font.font("Arial", 24));
         

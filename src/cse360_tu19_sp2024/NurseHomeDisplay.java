@@ -137,7 +137,10 @@ public class NurseHomeDisplay extends Application {
         
         enterVisitSummaryLink.setOnAction(new EventHandler<>() {
             public void handle(ActionEvent event) {
-                // TBD
+            	VisitSummaryDisplay visit = new VisitSummaryDisplay('n');
+                System.out.println("Opening Visit Summaries!");
+                visit.setUsername("johndoe");  // TODO temp for testing
+                visit.start(primaryStage);
             }
         });
         
