@@ -256,7 +256,7 @@ public class VisitSummaryDisplay extends Application {
                 data.put("Medications", medField.getText());
                 data.put("Immunizations", immField.getText());
                 data.put("Concerns", healField.getText());
-                fh.updateAttrs(username, data);
+                fh.updateAttrs("files/users/"+username+".txt", data);
             }
         });
         
@@ -293,8 +293,8 @@ public class VisitSummaryDisplay extends Application {
             immField.setText("Fully vaccinated.");
             healField.setText("No previous health risks.");
             
-            HashMap<String, String> data = fh.parse(username);
-            if(fh.getAttr(username, "Weight") != null) {
+            HashMap<String, String> data = fh.parse("files/users/"+username+".txt");
+            if(fh.getAttr("files/users/"+username+".txt", "Weight") != null) {
             	weightField.setText(data.get("Weight"));
                 ftField.setText(data.get("Feet"));
                 inField.setText(data.get("Inches"));
@@ -302,19 +302,19 @@ public class VisitSummaryDisplay extends Application {
                 firstField.setText(data.get("Pressure1"));
                 secondField.setText(data.get("Pressure2"));
             }
-            if(fh.getAttr(username, "Notes") != null) {
+            if(fh.getAttr("files/users/"+username+".txt", "Notes") != null) {
                 notesField.setText(data.get("Notes"));
             }
-            if(fh.getAttr(username, "Allergies") != null) {
+            if(fh.getAttr("files/users/"+username+".txt", "Allergies") != null) {
                 allField.setText(data.get("Allergies"));
             }
-            if(fh.getAttr(username, "Medications") != null) {
+            if(fh.getAttr("files/users/"+username+".txt", "Medications") != null) {
                 medField.setText(data.get("Medications"));
             }
-            if(fh.getAttr(username, "Immunizations") != null) {
+            if(fh.getAttr("files/users/"+username+".txt", "Immunizations") != null) {
                 immField.setText(data.get("Immunizations"));
             }
-            if(fh.getAttr(username, "Concerns") != null) {
+            if(fh.getAttr("files/users/"+username+".txt", "Concerns") != null) {
                 healField.setText(data.get("Concerns"));
             }
             
@@ -342,8 +342,8 @@ public class VisitSummaryDisplay extends Application {
             immField.setText("Fully vaccinated.");
             healField.setText("No previous health risks.");
             
-            HashMap<String, String> data = fh.parse(username);
-            if(fh.getAttr(username, "Weight") != null) {
+            HashMap<String, String> data = fh.parse("files/users/"+username+".txt");
+            if(fh.getAttr("files/users/"+username+".txt", "Weight") != null) {
             	weightField.setText(data.get("Weight"));
                 ftField.setText(data.get("Feet"));
                 inField.setText(data.get("Inches"));
@@ -351,19 +351,19 @@ public class VisitSummaryDisplay extends Application {
                 firstField.setText(data.get("Pressure1"));
                 secondField.setText(data.get("Pressure2"));
             }
-            if(fh.getAttr(username, "Notes") != null) {
+            if(fh.getAttr("files/users/"+username+".txt", "Notes") != null) {
                 notesField.setText(data.get("Notes"));
             }
-            if(fh.getAttr(username, "Allergies") != null) {
+            if(fh.getAttr("files/users/"+username+".txt", "Allergies") != null) {
                 allField.setText(data.get("Allergies"));
             }
-            if(fh.getAttr(username, "Medications") != null) {
+            if(fh.getAttr("files/users/"+username+".txt", "Medications") != null) {
                 medField.setText(data.get("Medications"));
             }
-            if(fh.getAttr(username, "Immunizations") != null) {
+            if(fh.getAttr("files/users/"+username+".txt", "Immunizations") != null) {
                 immField.setText(data.get("Immunizations"));
             }
-            if(fh.getAttr(username, "Concerns") != null) {
+            if(fh.getAttr("files/users/"+username+".txt", "Concerns") != null) {
                 healField.setText(data.get("Concerns"));
             }
             
@@ -375,6 +375,48 @@ public class VisitSummaryDisplay extends Application {
             		);
         }else { //nurse
         	setEditable(true);
+        	allField.setEditable(false);
+            medField.setEditable(false);
+            immField.setEditable(false);
+            healField.setEditable(false);
+            
+            weightField.setText("0");
+            ftField.setText("0");
+            inField.setText("0");
+            tempField.setText("0");
+            firstField.setText("0");
+            secondField.setText("0");
+            notesField.setText("No notes.");
+            
+            allField.setText("No allergies.");
+            medField.setText("No medications.");
+            immField.setText("Fully vaccinated.");
+            healField.setText("No previous health risks.");
+            
+            HashMap<String, String> data = fh.parse("files/users/"+username+".txt");
+            if(fh.getAttr("files/users/"+username+".txt", "Weight") != null) {
+            	weightField.setText(data.get("Weight"));
+                ftField.setText(data.get("Feet"));
+                inField.setText(data.get("Inches"));
+                tempField.setText(data.get("Temperature"));
+                firstField.setText(data.get("Pressure1"));
+                secondField.setText(data.get("Pressure2"));
+            }
+            if(fh.getAttr("files/users/"+username+".txt", "Notes") != null) {
+                notesField.setText(data.get("Notes"));
+            }
+            if(fh.getAttr("files/users/"+username+".txt", "Allergies") != null) {
+                allField.setText(data.get("Allergies"));
+            }
+            if(fh.getAttr("files/users/"+username+".txt", "Medications") != null) {
+                medField.setText(data.get("Medications"));
+            }
+            if(fh.getAttr("files/users/"+username+".txt", "Immunizations") != null) {
+                immField.setText(data.get("Immunizations"));
+            }
+            if(fh.getAttr("files/users/"+username+".txt", "Concerns") != null) {
+                healField.setText(data.get("Concerns"));
+            }
         	buttons.getChildren().addAll(
             		home,
             		save
