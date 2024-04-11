@@ -345,6 +345,9 @@ public class PatientSignupDisplay extends LoginDisplay {
             	alert.showAndWait();
             	return;
             }
+            
+            // Set permission level for Patient
+            data.put("Account type", "Patient");
         	
             // Save to file
         	FileHandler fh = new FileHandler();
@@ -356,6 +359,7 @@ public class PatientSignupDisplay extends LoginDisplay {
         	alert.showAndWait();
         	PatientDetailsDisplay patient = new PatientDetailsDisplay();
         	System.out.println("Opening Patient Details!");
+        	patient.setUsername(username.getText());
         	patient.start(primaryStage);
         });
 

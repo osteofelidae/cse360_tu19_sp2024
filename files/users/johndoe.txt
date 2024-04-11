@@ -1,6 +1,7 @@
 Email: johndoe@example.com
 DOB Month: January
 Sex: Male
+Account type: Patient
 Last name: Doe
 Postal code: 12345
 DOB Year: 2000

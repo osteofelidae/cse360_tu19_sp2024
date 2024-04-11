@@ -53,6 +53,7 @@ public class VisitSummaryDisplay extends Application {
 
     public VisitSummaryDisplay(char accessLevel){
     	this.accessLevel = accessLevel;
+    	populateFields();
     }
     
     @Override
@@ -408,6 +409,10 @@ public class VisitSummaryDisplay extends Application {
         primaryStage.show();
         
         
+    }
+    
+    public void populateFields() {
+    	
     }
 
     private void setEditable(boolean value){
