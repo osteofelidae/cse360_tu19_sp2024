@@ -811,12 +811,7 @@ public class PatientDetailsDisplay extends Application {
         });
         insurance.getChildren().addAll(iTitle, iInsuranceProvider, iInsuranceProviderField, iPolicyNumber, iPolicyNumberField, iHeader, iHbox1, iDateOfBirth, iHbox2, iRelationship, iRelationshipField, iUpdate);
         
-        
-        // TODO DIEGO START HERE
-        /*
-		 *	Medicare/Medicaid
-		*/
-        
+        // --- Medicare/Medicaid ------------------------------------------------------------------
         VBox medicareMedicaid = new VBox(10);
         medicareMedicaid.setStyle("-fx-border-color: gray; -fx-border-width: 2px;");
         medicareMedicaid.setPadding(new Insets(10));
@@ -824,6 +819,7 @@ public class PatientDetailsDisplay extends Application {
         Label mmTitle = new Label("Medicare/Medicaid");
         mmTitle.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         
+        // --- Coverage number --------------------------------------------------------------------
         Label mmNumber = new Label("Medicaid coverage number");
         mmNumber.setFont(Font.font("Arial", 12));
         
@@ -831,6 +827,13 @@ public class PatientDetailsDisplay extends Application {
         mmNumberField.setMinWidth(300);
         mmNumberField.setPromptText("Enter coverage number...");
         
+        // If existing coverage number exists, display it
+        field = data.get("Coverage number");
+        if (field != null) {
+        	mmNumberField.setText(field);
+        }
+        
+        // --- Button -----------------------------------------------------------------------------
         Button mmUpdate = new Button();
         mmUpdate.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
         mmUpdate.setPrefWidth(100);
@@ -838,15 +841,31 @@ public class PatientDetailsDisplay extends Application {
         mmUpdate.setText("Update");
         mmUpdate.setOnAction(new EventHandler<>() {
             public void handle(ActionEvent event) {
+            	
+            	// HashMaps for data
+            	HashMap<String, String> toUpdate = new HashMap<String, String>();
+            	
+            	// If coverage number is not set, show an error
+            	if (mmNumberField.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Coverage number is not set");
+                	alert.showAndWait();
+                	return;
+                
+                // If insurance provider is valid, add to 'toUpdate'
+            	} else {
+            		
+            		toUpdate.put("Coverage number", mmNumberField.getText());
+            	}
+            	
+            	fh.updateAttrs(fileName, toUpdate);
                 System.out.println("Updated!");
             }
         });
         medicareMedicaid.getChildren().addAll(mmTitle, mmNumber, mmNumberField, mmUpdate);
         
-        
-        
-        
-        
+        // --- Actions ----------------------------------------------------------------------------
         VBox actions = new VBox(10);
         actions.setStyle("-fx-border-color: gray; -fx-border-width: 2px;");
         actions.setPadding(new Insets(10));
@@ -877,11 +896,7 @@ public class PatientDetailsDisplay extends Application {
         });
         actions.getChildren().addAll(aTitle, messaging, aHeader, visitSummaries);
         
-        
-        
-        /*
-		 *	Emergency Contact
-		*/
+        // --- Emergency contact ------------------------------------------------------------------
         VBox emergencyContact = new VBox(10);
         emergencyContact.setStyle("-fx-border-color: gray; -fx-border-width: 2px;");
         emergencyContact.setPadding(new Insets(10));
@@ -891,6 +906,7 @@ public class PatientDetailsDisplay extends Application {
         
         HBox ecHbox1 = new HBox(10);
         
+        // --- Emergency first name ---------------------------------------------------------------
         VBox ecFirstNameVbox = new VBox(10);
         Label ecFirstName = new Label("First name");
         ecFirstName.setFont(Font.font("Arial", 12));
@@ -899,6 +915,13 @@ public class PatientDetailsDisplay extends Application {
         ecFirstNameField.setPromptText("Enter first name...");
         ecFirstNameVbox.getChildren().addAll(ecFirstName, ecFirstNameField);
         
+        // If existing coverage number exists, display it
+        field = data.get("Emergency first name");
+        if (field != null) {
+        	ecFirstNameField.setText(field);
+        }
+        
+        // --- Emergency last name ----------------------------------------------------------------
         VBox ecLastNameVbox = new VBox(10);
         Label ecLastName = new Label("Last name");
         ecLastName.setFont(Font.font("Arial", 12));
@@ -907,8 +930,15 @@ public class PatientDetailsDisplay extends Application {
         ecLastNameField.setPromptText("Enter last name...");
         ecLastNameVbox.getChildren().addAll(ecLastName, ecLastNameField);
         
+        // If existing coverage number exists, display it
+        field = data.get("Emergency last name");
+        if (field != null) {
+        	ecLastNameField.setText(field);
+        }
+        
         ecHbox1.getChildren().addAll(ecFirstNameVbox, ecLastNameVbox);
         
+        // --- Emergency email --------------------------------------------------------------------
         Label ecEmail = new Label("Email");
         ecEmail.setFont(Font.font("Arial", 12));
         
@@ -916,6 +946,13 @@ public class PatientDetailsDisplay extends Application {
         ecEmailField.setMinWidth(300);
         ecEmailField.setPromptText("Enter email...");
         
+        // If existing emergency email exists, display it
+        field = data.get("Emergency email");
+        if (field != null) {
+        	ecEmailField.setText(field);
+        }
+        
+        // --- Emergency phone number -------------------------------------------------------------
         Label ecPhone = new Label("Phone number");
         ecPhone.setFont(Font.font("Arial", 12));
         
@@ -923,6 +960,13 @@ public class PatientDetailsDisplay extends Application {
         ecPhoneField.setMinWidth(300);
         ecPhoneField.setPromptText("Enter phone number...");
         
+        // If existing emergency email exists, display it
+        field = data.get("Emergency phone number");
+        if (field != null) {
+        	ecPhoneField.setText(field);
+        }
+        
+        // --- Submit button ----------------------------------------------------------------------
         Button ecUpdate = new Button();
         ecUpdate.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
         ecUpdate.setPrefWidth(100);
@@ -930,6 +974,68 @@ public class PatientDetailsDisplay extends Application {
         ecUpdate.setText("Update");
         ecUpdate.setOnAction(new EventHandler<>() {
             public void handle(ActionEvent event) {
+            	
+            	// HashMaps for data
+            	HashMap<String, String> toUpdate = new HashMap<String, String>();
+            	
+            	// If first name is not set, show an error
+            	if (ecFirstNameField.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("First name is not set");
+                	alert.showAndWait();
+                	return;
+                
+                // If first name is valid, add to 'toUpdate'
+            	} else {
+            		
+            		toUpdate.put("Emergency first name", ecFirstNameField.getText());
+            	}
+            	
+            	// If last name is not set, show an error
+            	if (ecLastNameField.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Last name is not set");
+                	alert.showAndWait();
+                	return;
+                
+                // If last name is valid, add to 'toUpdate'
+            	} else {
+            		
+            		toUpdate.put("Emergency last name", ecLastNameField.getText());
+            	}
+            	
+            	// If email is not set, show an error
+            	if (ecEmailField.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Email is not set");
+                	alert.showAndWait();
+                	return;
+                
+                // If email is valid, add to 'toUpdate'
+            	} else {
+            		
+            		toUpdate.put("Emergency email", ecEmailField.getText());
+            	}
+            	
+            	// If phone number is not set, show an error
+            	if (ecPhoneField.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Phone number is not set");
+                	alert.showAndWait();
+                	return;
+                
+                // If phone number is valid, add to 'toUpdate'
+            	} else {
+            		
+            		toUpdate.put("Emergency phone number", ecPhoneField.getText());
+            	}
+            	
+            	fh.updateAttrs(fileName, toUpdate);
+            	
                 System.out.println("Updated!");
             }
         });
@@ -937,9 +1043,7 @@ public class PatientDetailsDisplay extends Application {
         
         
         
-        /*
-		 *	Pharmacy
-		*/
+        // --- Pharmacy ---------------------------------------------------------------------------
         VBox pharmacy = new VBox(10);
         pharmacy.setStyle("-fx-border-color: gray; -fx-border-width: 2px;");
         pharmacy.setPadding(new Insets(10)); 
@@ -947,6 +1051,7 @@ public class PatientDetailsDisplay extends Application {
         Label pTitle = new Label("Pharmacy");
         pTitle.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         
+        // --- Pharmacy name ----------------------------------------------------------------------
         Label pName = new Label("Pharmacy Name");
         pName.setFont(Font.font("Arial", 12));
         
@@ -954,6 +1059,13 @@ public class PatientDetailsDisplay extends Application {
         pNameField.setMinWidth(300);
         pNameField.setPromptText("Enter pharmacy name...");
         
+        // If existing pharmacy name exists, display it
+        field = data.get("Pharmacy name");
+        if (field != null) {
+        	pNameField.setText(field);
+        }
+        
+        // --- Pharmacy address 1 -----------------------------------------------------------------
         Label pAddressLine1 = new Label("Address line 1");
         pAddressLine1.setFont(Font.font("Arial", 12));
         
@@ -961,15 +1073,35 @@ public class PatientDetailsDisplay extends Application {
         pAddressLine1Field.setMinWidth(300);
         pAddressLine1Field.setPromptText("Enter address 1...");
         
+        // If existing pharmacy address 1 exists, display it
+        field = data.get("Pharmacy address 1");
+        if (field != null) {
+        	pAddressLine1Field.setText(field);
+        }
+        
+        // --- Pharmacy address 2 -----------------------------------------------------------------
         Label pAddressLine2 = new Label("Address line 2");
         pAddressLine2.setFont(Font.font("Arial", 12));
+        
+        // If existing pharmacy address 1 exists, display it
+        field = data.get("Pharmacy address 1");
+        if (field != null) {
+        	pAddressLine1Field.setText(field);
+        }
         
         TextField pAddressLine2Field = new TextField();
         pAddressLine2Field.setMinWidth(300);
         pAddressLine2Field.setPromptText("Enter address 2 (optional)...");
         
+        // If existing pharmacy address 2 exists, display it
+        field = data.get("Pharmacy address 2");
+        if (field != null) {
+        	pAddressLine2Field.setText(field);
+        }
+        
         HBox pHbox1 = new HBox(10);
         
+        // --- Pharmacy state  --------------------------------------------------------------------
         VBox pStateVbox = new VBox(10);
         Label pState = new Label("State");
         pState.setFont(Font.font("Arial", 12));
@@ -986,6 +1118,13 @@ public class PatientDetailsDisplay extends Application {
         	);
         pStateVbox.getChildren().addAll(pState, pStateList);
         
+        // If existing state exists, display it
+        field = data.get("Pharmacy state");
+        if (field != null) {
+        	pStateList.getSelectionModel().select(field);
+        }
+        
+        // --- Pharmacy postal code ---------------------------------------------------------------
         VBox pPostalCodeVbox = new VBox(10);
         Label pPostalCode = new Label("Postal Code");
         pPostalCode.setFont(Font.font("Arial", 12));
@@ -994,8 +1133,15 @@ public class PatientDetailsDisplay extends Application {
         pPostalCodeField.setPromptText("Enter postal code...");
         pPostalCodeVbox.getChildren().addAll(pPostalCode, pPostalCodeField);
         
+        // If existing pharmacy address 2 exists, display it
+        field = data.get("Pharmacy postal code");
+        if (field != null) {
+        	pPostalCodeField.setText(field);
+        }
+        
         pHbox1.getChildren().addAll(pStateVbox, pPostalCodeVbox);
         
+        // --- Update button ----------------------------------------------------------------------
         Button pUpdate = new Button();
         pUpdate.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2px;");
         pUpdate.setPrefWidth(100);
@@ -1003,6 +1149,77 @@ public class PatientDetailsDisplay extends Application {
         pUpdate.setText("Update");
         pUpdate.setOnAction(new EventHandler<>() {
             public void handle(ActionEvent event) {
+            	
+            	// HashMaps for data
+            	HashMap<String, String> toUpdate = new HashMap<String, String>();
+            	
+            	// If coverage number is not set, show an error
+            	if (pNameField.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Pharmacy name is not set");
+                	alert.showAndWait();
+                	return;
+                
+                // If insurance provider is valid, add to 'toUpdate'
+            	} else {
+            		
+            		toUpdate.put("Pharmacy name", pNameField.getText());
+            	}
+            	
+            	// If pharmacy address 1 is not set, show an error
+            	if (pAddressLine1Field.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Pharmacy address 1 is not set");
+                	alert.showAndWait();
+                	return;
+                
+                // If insurance provider is valid, add to 'toUpdate'
+            	} else {
+            		
+            		toUpdate.put("Pharmacy address 1", pAddressLine1Field.getText());
+            	}
+            	
+            	// If pharmacy address 2 is not set, delete it
+            	if (pAddressLine2Field.getText().equals("")) {
+            		fh.removeAttr(fileName, "Pharmacy address 2");
+                
+                // If insurance provider is valid, add to 'toUpdate'
+            	} else {
+            		
+            		toUpdate.put("Pharmacy address 2", pAddressLine2Field.getText());
+            	}
+            	
+            	// If state is not set, display alert and interrupt function flow
+                if (pStateList.getSelectionModel().isEmpty()) {
+                	Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("State is not set");
+                	alert.showAndWait();
+                	return;
+                	
+                // If state input is valid, add to'data'
+                } else {
+                	toUpdate.put("Pharmacy state", pStateList.getValue().toString());
+                }
+                
+                // If postal code is not set, alert
+            	if (pPostalCodeField.getText().equals("")) {
+            		Alert alert = new Alert(AlertType.ERROR);
+                	alert.setHeaderText("Invalid input");
+                	alert.setContentText("Postal code is not set");
+                	alert.showAndWait();
+                	return;
+                
+                // If postal code is valid, add to 'toUpdate'
+            	} else {
+            		
+            		toUpdate.put("Pharmacy postal code", pPostalCodeField.getText());
+            	}
+            	
+            	fh.updateAttrs(fileName, toUpdate);
+            	
                 System.out.println("Updated!");
             }
         });
