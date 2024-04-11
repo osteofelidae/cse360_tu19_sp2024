@@ -51,6 +51,7 @@ public class VisitSummaryDisplay extends Application {
 
     public VisitSummaryDisplay(char accessLevel){
     	this.accessLevel = accessLevel;
+    	populateFields();
     }
     
     @Override
@@ -72,7 +73,7 @@ public class VisitSummaryDisplay extends Application {
 
         FileHandler fh = new FileHandler();
         String fname = fh.getAttr("files/users/"+username+".txt", "First name");
-        String lname = fh.getAttr("files/users/"+username+".txt", "Las name");
+        String lname = fh.getAttr("files/users/"+username+".txt", "Last name");
         Label title = new Label("Visit Summaries - " + fname + " " + lname);
         title.setFont(Font.font("Arial", 24));
         
@@ -398,6 +399,10 @@ public class VisitSummaryDisplay extends Application {
         primaryStage.show();
         
         
+    }
+    
+    public void populateFields() {
+    	
     }
 
     private void setEditable(boolean value){
